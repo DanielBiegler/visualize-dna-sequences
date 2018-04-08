@@ -7,3 +7,7 @@ https://www.reddit.com/r/dataisbeautiful/comments/8anoku/years_ago_i_wrote_a_jav
 about his old work.
 
 I felt up to the task and wanted to give it a go.
+
+## Demo
+
+https://danielbiegler.github.io/visualize-dna-sequences/
