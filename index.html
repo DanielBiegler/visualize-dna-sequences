@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Visualize DNA Sequence</title>
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<canvas id="canvas-main" width="800" height="300"></canvas>
+	
+	<!-- Settings -->
+	<br>
+	<br>
+	<label for="a-dir"><b>A</b> direction:</label>
+	<select id="a-dir">
+		<option value="N" selected>UP</option>
+		<option value="S">DOWN</option>
+		<option value="W">LEFT</option>
+		<option value="E">RIGHT</option>
+	</select>
+
+	<label for="t-dir"><b>T</b> direction:</label>
+	<select id="t-dir">
+		<option value="N">UP</option>
+		<option value="S" selected>DOWN</option>
+		<option value="W">LEFT</option>
+		<option value="E">RIGHT</option>
+	</select>
+
+	<label for="g-dir"><b>G</b> direction:</label>
+	<select id="g-dir">
+		<option value="N">UP</option>
+		<option value="S">DOWN</option>
+		<option value="W" selected>LEFT</option>
+		<option value="E">RIGHT</option>	
+	</select>
+
+	<label for="c-dir"><b>C</b> direction:</label>
+	<select id="c-dir">
+		<option value="N">UP</option>
+		<option value="S">DOWN</option>
+		<option value="W">LEFT</option>
+		<option value="E" selected>RIGHT</option>
+	</select>
+
+	<label for="x-dir"><b>UNKNOWN</b> direction:</label>
+	<select id="x-dir">
+		<!-- <option value="RANDOM">RANDOM</option> -->
+		<option value="STOP" selected>DONT MOVE</option>
+	</select>
+
+	<br>
+	<br>
+
+	<label for="a-col"><b>A</b> color</label>
+	<input id="a-col" type="color" value="#FF0000">
+	<label for="t-col"><b>T</b> color</label>
+	<input id="t-col" type="color" value="#00FF00">
+	<label for="g-col"><b>G</b> color</label>
+	<input id="g-col" type="color" value="#0000FF">
+	<label for="c-col"><b>C</b> color</label>
+	<input id="c-col" type="color" value="#FF00FF">
+	<label for="x-col"><b>UNKNOWN</b> color</label>
+	<input id="x-col" type="color">
+
+	<br>
+	<br>
+
+	<label for="canvas-w">Canvas width</label>
+	<input type="number" id="canvas-w" value="800">
+
+	<label for="canvas-h">Canvas height</label>
+	<input type="number" id="canvas-h" value="600">
+
+	<br>
+	<br>
+
+	<label for="x-coord">Start X axis:</label>
+	<input type="number" id="x-coord" value="400">
+
+	<label for="y-coord">Start Y axis:</label>
+	<input type="number" id="y-coord" value="150">
+
+	<br>
+	<br>
+
+	<label for="dna-seq">DNA Sequence</label>
+	<textarea type="text" id="dna-seq">tcgtcagtgcgccgctttaatggatcacagccaatacagttgccgactctggtctacgaagacggcccaatgctgagggctggtcattagcgcaatcacaatagatgcatcgcaacggtcatactcagagccgaagtcttagatttttaacgccctaaagcccccccacccatcgaatcgcgcttcctgtaaagatcgtaggccaatacttcccgactgggtgaaagtctgtgtagggatgagcagggcatcatctccaattatcaacatgctggctgacgctagatgtgaaggtggcctccatctgacgcgagctgacattgtccgggttagtgctcttactttcgactccatcaaaagaacgcgcggatgtcaccttaagtgccaagataatgtggttagctttgcaatgaagcccctgaaacttacaatagagtaaaactctaccggaacggaatcttacgtgaggttcccgattcgcgacagaaaccctgtgcaccaatcacgtactacagtgagtgacaactcgggtgtgtagcagcaacacctattggccattatcattgggcatgtcggtctttagaaagaaagtctaattgggatataagaaggctcctactccatttaacgatatgattctgcaccgcaggcctacacacaacaatgctcggatcaattgtgacgataatgctccacccatcacctgctgtccaagaatagaccccggtctcagctctagtcactgatccggtgcaagccagatattaattcgccccggtttattcggcttaaggtatagactacttgacacctaaaggccgttaaagcgatgccattggttgcctcttagagttagcaaagctggttctgccagcaccataagtttgttctgcattacttacgcctatatgcggggaaaataggatacatttcttcccagccgttagatcttcatttgttcatacaccgcccaccgaagtccgcaatatataggaggtctgaggagatccagcgggtgactggtattctggcctgcaatcacagacaacccgggttgcacgagacggacagttccaaactaccttaaaagtggataccgtgtagtcgcgcggcgctgtaaatgttacggatgggacaaggtgctaagtcatgttctatggggattatgtgagccatctaaaacacctcccccgcagcctttcgcggacgggacgagagccgttccatccgatcttcgtctatttagcagggtataaagaataggtatttcccgacttcgctcctgggtgtctcggtccatcgctgctgtcgctttagggactttcgggggttttaaactagtcgatctccccaactaggcttagcagattcgtaatctagtgaatatttcatgcgccataagaatgattgatgggcttagattaggaccgatattatacgattatctaccgtcgtcacagatatgacgttatacagggaaacgtggctcgtgaatcaatagacaggacggttgtcagagggaaagggcacttcgccacaatggcgcgccctaaccgctcaaatatgtcgggtacacgcttcccgccggggggggcactatcatcagctgctccaaactca
+	</textarea>
+
+	<br>
+	<br>
+
+	<input type="button" value="START" id="btn-start" autofocus>
+
+	<!-- Scripts -->
+	<!-- There might be imports later for JPG encoding or whatever? -->
+	<script src="main.js"></script>
+</body>
+</html>
