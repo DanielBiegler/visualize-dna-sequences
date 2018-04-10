@@ -108,6 +108,23 @@ function moveCursor(direction, cursor) {
 			break;
 		case 'W':
 			cursor.x -= 1;
+			break;
+		case 'NE':
+			cursor.x += 1;
+			cursor.y -= 1;
+			break;
+		case 'NW':
+			cursor.x -= 1;
+			cursor.y -= 1;
+			break;
+		case 'SE':
+			cursor.x += 1;
+			cursor.y += 1;
+			break;
+		case 'SW':
+			cursor.x -= 1;
+			cursor.y += 1;
+			break;
 		default:
 			break;
 	}
@@ -144,6 +161,7 @@ function draw() {
 				[col[0], col[1], col[2], ] = c_col;
 				break;
 			default:
+				moveCursor(x_dir, cursor);
 				[col[0], col[1], col[2], ] = x_col;
 				break;
 		}

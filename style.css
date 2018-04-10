@@ -1,3 +1,8 @@
 #canvas-main {
 	border: 1px solid #000000;
 }
+
+.color-picker {
+	height: 40px; 
+	padding: 6px 10px;
+}
