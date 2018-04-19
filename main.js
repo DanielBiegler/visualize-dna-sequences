@@ -69,15 +69,6 @@ function applySettings() {
 	x_dir = document.getElementById('x-dir').value;
 	[x_col[0], x_col[1], x_col[2], ] = hexToRGB(document.getElementById('x-col').value);
 
-	document.getElementById('canvas-main').width = document.getElementById('canvas-w').value;
-	document.getElementById('canvas-main').height = document.getElementById('canvas-h').value;
-	
-	x_start = parseInt(document.getElementById('x-coord').value);
-	y_start = parseInt(document.getElementById('y-coord').value);
-
-	canvas_w = document.getElementById('canvas-main').width;
-	canvas_h = document.getElementById('canvas-main').height;
-
 	dna_seq = document.getElementById('dna-seq').value.toUpperCase();
 }
 
