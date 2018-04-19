@@ -69,16 +69,105 @@ function applySettings() {
 	x_dir = document.getElementById('x-dir').value;
 	[x_col[0], x_col[1], x_col[2], ] = hexToRGB(document.getElementById('x-col').value);
 
-	document.getElementById('canvas-main').width = document.getElementById('canvas-w').value;
-	document.getElementById('canvas-main').height = document.getElementById('canvas-h').value;
-	
-	x_start = parseInt(document.getElementById('x-coord').value);
-	y_start = parseInt(document.getElementById('y-coord').value);
-
-	canvas_w = document.getElementById('canvas-main').width;
-	canvas_h = document.getElementById('canvas-main').height;
-
 	dna_seq = document.getElementById('dna-seq').value.toUpperCase();
+}
+
+/**
+ * Uses the `dna_seq` to determine a canvas size that fits the sequence.
+ * 
+ * It has to run through the `dna_seq` once.
+ * 
+ * After the calculations are done, the canvas gets set to a fitting size.
+ * 
+ * @param {Number} offset For making the canvas a bit bigger for aesthetics
+ */
+function cropCanvas(offset) {
+	// cursor here means the currently active position and its height/width
+	let cursor_height = cursor_width = 0;
+	let height_up = height_down = width_left = width_right = 0; 
+
+	/**
+	 * Helper function for setting the cursor_[height/width] properly
+	 */
+	function setCursor(direction) {
+		switch (direction) {
+			case 'N':
+				cursor_height += 1;
+				break;
+			case 'NE':
+				cursor_height += 1;
+				cursor_width += 1;
+				break;
+			case 'NW':
+				cursor_height += 1;
+				cursor_width  -= 1;
+				break;
+			case 'E':
+				cursor_width += 1;
+				break;
+			case 'S':
+				cursor_height -= 1;
+				break;
+			case 'SE':
+				cursor_height -= 1;
+				cursor_width  += 1;
+				break;
+			case 'SW':
+				cursor_height -= 1;
+				cursor_width  -= 1;
+				break;
+			case 'W':
+				cursor_width -= 1;
+			default:
+				break;
+		}
+	}
+
+	for(let i = 0; i < dna_seq.length; i++) {
+		switch (dna_seq.charAt(i)) {
+			case 'A':
+				setCursor(a_dir);
+				break;
+			case 'T':
+				setCursor(t_dir);
+				break;
+			case 'G':
+				setCursor(g_dir);
+				break;
+			case 'C':
+				setCursor(c_dir);
+				break;
+			default:
+				setCursor(x_dir);
+				break;
+		}
+
+		// check with 2 seperate ifs because diagonal direction is possible
+		if(cursor_height > height_up) {
+			height_up = cursor_height;
+		}
+		else if(cursor_height < height_down) {
+			height_down = cursor_height;
+		}
+		
+		if(cursor_width > width_right) {
+			width_right = cursor_width;
+		}
+		else if(cursor_width < width_left) {
+			width_left = cursor_width;
+		}
+
+	}
+	
+	// height_down and width_left are either zero or negative now
+	let min_height = height_up + Math.abs(height_down);
+	let min_width = width_right + Math.abs(width_left);
+
+	// now crop canvas and set global variables
+	document.getElementById('canvas-main').width  = canvas_w = min_width + offset * 2;
+	document.getElementById('canvas-main').height = canvas_h = min_height + offset * 2;
+	x_start = Math.abs(width_left) + offset;
+	y_start = min_height + height_down + offset;
 }
 
 
@@ -185,6 +274,7 @@ function getColorIndicesForCoord(x, y, width) {
 
 function start() {
 	applySettings();
+	cropCanvas(20);
 	draw();
 }
 
