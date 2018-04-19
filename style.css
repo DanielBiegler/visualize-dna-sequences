@@ -6,3 +6,7 @@
 	height: 40px; 
 	padding: 6px 10px;
 }
+
+a {
+	font-weight: bold;
+}
