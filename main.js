@@ -1,5 +1,5 @@
 /* Setting Vars */
-var a_dir, a_col = [0, 0, 0, 255],
+let a_dir, a_col = [0, 0, 0, 255],
 	t_dir, t_col = [0, 0, 0, 255],
 	g_dir, g_col = [0, 0, 0, 255],
 	c_dir, c_col = [0, 0, 0, 255],
@@ -267,7 +267,7 @@ function draw() {
 
 
 function getColorIndicesForCoord(x, y, width) {
-	var c = y * (width * 4) + x * 4;
+	let c = y * (width * 4) + x * 4;
 	return [c, c + 1, c + 2, c + 3]; /* r, g, b, a */
 }
 
@@ -280,3 +280,72 @@ function start() {
 
 
 document.getElementById('btn-start').addEventListener('click', start);
+
+
+/**
+ * 
+ * @param {*} file The file from an HTML Input type=file.
+ * @param {number} chunk_size How big one read block is in bytes.
+ * @param {function} callback Gets called per read block. The callback gets the read block passed into, use it.
+ */
+function parseFile(file, chunk_size, callback) {
+	let offset = 0;
+
+	/**
+	 * Initializes the FileReader, which will call our handler after reading/failing.
+	 */
+	const read_block = () => {
+		let reader = new FileReader();
+		let blob = file.slice(offset, chunk_size + offset);
+		reader.onload = read_block_handler;
+		reader.readAsText(blob);
+	}
+	
+	const progress = $('#progress>span');
+	progress.removeClass('text-success text-danger').addClass('text-info');
+	
+	/**
+	 * Passes the now read block to the callback for processing.
+	 * 
+	 * Afterwards updates the progress bar.
+	 * 
+	 * After that, the reader is available for reading again, which we call.
+	 * 
+	 * @param {*} event 
+	 */
+	const read_block_handler = (event) => {
+		if(event.target.error == null) {
+			offset += event.target.result.length;
+			callback(event.target.result); // callback for handling read chunk
+			progress.html(((offset/file.size)*100).toFixed(1) + '%');
+		} 
+		else {
+			progress.removeClass('text-info').addClass('text-danger').html('ERROR!');
+			console.log("Read error: " + event.target.error);
+			return;
+		}
+		if(offset >= file.size) {			
+			progress.removeClass('text-info').addClass('text-success').html('100%');
+			console.log("Done reading");
+			return;
+		}
+		
+		// next chunk
+		read_block(offset, chunk_size);
+	}
+	
+	// warning: "recursive"! read_block => handler => read_block => ...
+	read_block();
+}
+
+
+$('#file').change(() => {
+	const file = document.getElementById('file').files[0];
+	const chunk_size = 2048 * 1024;
+	parseFile(file, chunk_size, (data_chunk) => {
+		console.log("Chunk read!");
+		// console.log(data_chunk);
+	});
+
+});
+
