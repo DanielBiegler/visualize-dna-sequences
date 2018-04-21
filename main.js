@@ -286,6 +286,6 @@ $('#btn-responsive').click(function() {
 
 	$('#canvas-main').toggleClass('w-100');
 
-	$(this).html( $(this).html() == 'Fit your device' ? 'Original size' : 'Fit your device' );
+	$(this).html( $(this).html() == 'Original size' ? 'Fit your device' : 'Original size' );
 
 });
