@@ -280,3 +280,12 @@ function start() {
 
 
 document.getElementById('btn-start').addEventListener('click', start);
+
+
+$('#btn-responsive').click(function() {
+
+	$('#canvas-main').toggleClass('w-100');
+
+	$(this).html( $(this).html() == 'Original size' ? 'Fit your device' : 'Original size' );
+
+});
