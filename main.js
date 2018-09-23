@@ -9,7 +9,7 @@ let a_dir, a_col = [0, 0, 0, 255],
 
 	canvas_w, canvas_h,
 	
-	dna_seq;
+	point_offset;
 
 
 /**
@@ -28,8 +28,6 @@ function printSettings() {
 		'x_start:', x_start, ', y_start:', y_start, '\n', 
 		
 		'canvas_w:', canvas_w, ', canvas_h:', canvas_h, '\n', '\n',
-
-		'dna_seq:', dna_seq
 	);
 }
 
@@ -69,105 +67,7 @@ function applySettings() {
 	x_dir = document.getElementById('x-dir').value;
 	[x_col[0], x_col[1], x_col[2], ] = hexToRGB(document.getElementById('x-col').value);
 
-	dna_seq = document.getElementById('dna-seq').value.toUpperCase();
-}
-
-/**
- * Uses the `dna_seq` to determine a canvas size that fits the sequence.
- * 
- * It has to run through the `dna_seq` once.
- * 
- * After the calculations are done, the canvas gets set to a fitting size.
- * 
- * @param {Number} offset For making the canvas a bit bigger for aesthetics
- */
-function cropCanvas(offset) {
-	// cursor here means the currently active position and its height/width
-	let cursor_height = cursor_width = 0;
-	let height_up = height_down = width_left = width_right = 0; 
-
-	/**
-	 * Helper function for setting the cursor_[height/width] properly
-	 */
-	function setCursor(direction) {
-		switch (direction) {
-			case 'N':
-				cursor_height += 1;
-				break;
-			case 'NE':
-				cursor_height += 1;
-				cursor_width += 1;
-				break;
-			case 'NW':
-				cursor_height += 1;
-				cursor_width  -= 1;
-				break;
-			case 'E':
-				cursor_width += 1;
-				break;
-			case 'S':
-				cursor_height -= 1;
-				break;
-			case 'SE':
-				cursor_height -= 1;
-				cursor_width  += 1;
-				break;
-			case 'SW':
-				cursor_height -= 1;
-				cursor_width  -= 1;
-				break;
-			case 'W':
-				cursor_width -= 1;
-			default:
-				break;
-		}
-	}
-
-	for(let i = 0; i < dna_seq.length; i++) {
-		switch (dna_seq.charAt(i)) {
-			case 'A':
-				setCursor(a_dir);
-				break;
-			case 'T':
-				setCursor(t_dir);
-				break;
-			case 'G':
-				setCursor(g_dir);
-				break;
-			case 'C':
-				setCursor(c_dir);
-				break;
-			default:
-				setCursor(x_dir);
-				break;
-		}
-
-		// check with 2 seperate ifs because diagonal direction is possible
-		if(cursor_height > height_up) {
-			height_up = cursor_height;
-		}
-		else if(cursor_height < height_down) {
-			height_down = cursor_height;
-		}
-		
-		if(cursor_width > width_right) {
-			width_right = cursor_width;
-		}
-		else if(cursor_width < width_left) {
-			width_left = cursor_width;
-		}
-
-	}
-	
-	// height_down and width_left are either zero or negative now
-	let min_height = height_up + Math.abs(height_down);
-	let min_width = width_right + Math.abs(width_left);
-
-	// now crop canvas and set global variables
-	document.getElementById('canvas-main').width  = canvas_w = min_width + offset * 2;
-	document.getElementById('canvas-main').height = canvas_h = min_height + offset * 2;
-	x_start = Math.abs(width_left) + offset;
-	y_start = min_height + height_down + offset;
+	point_offset = parseInt(document.getElementById('offset').value);
 }
 
 
@@ -220,58 +120,6 @@ function moveCursor(direction, cursor) {
 }
 
 
-/**
- * Draws the DNA sequence.
- * 
- * It uses the global variables, so make sure to call `applySettings()`
- * before you call this unless you know what you're doing.
- */
-function draw() {
-	const ctx = document.getElementById('canvas-main').getContext('2d');
-	let img_data = ctx.createImageData(canvas_w, canvas_h);
-	let cursor = {x: x_start, y: y_start};
-
-	for (let index = 0, col = [255, 0, 0, 255]; index < dna_seq.length; index++) {
-		switch (dna_seq.charAt(index)) {
-			case 'A':
-				moveCursor(a_dir, cursor);
-				[col[0], col[1], col[2], ] = a_col;
-				break;
-			case 'T':
-				moveCursor(t_dir, cursor);
-				[col[0], col[1], col[2], ] = t_col;
-				break;
-			case 'G':
-				moveCursor(g_dir, cursor);
-				[col[0], col[1], col[2], ] = g_col;
-				break;
-			case 'C':
-				moveCursor(c_dir, cursor);
-				[col[0], col[1], col[2], ] = c_col;
-				break;
-			default:
-				moveCursor(x_dir, cursor);
-				[col[0], col[1], col[2], ] = x_col;
-				break;
-		}
-
-		const color_indices = getColorIndicesForCoord(cursor.x, cursor.y, canvas_w);
-		const [r_index, g_index, b_index, a_index] = color_indices;
-
-		[img_data.data[r_index], img_data.data[g_index], img_data.data[b_index], img_data.data[a_index]] = col;
-
-	}
-	
-	ctx.putImageData(img_data, 0, 0);
-}
-
-
-function getColorIndicesForCoord(x, y, width) {
-	let c = y * (width * 4) + x * 4;
-	return [c, c + 1, c + 2, c + 3]; /* r, g, b, a */
-}
-
-
 function start() {
 	applySettings();
 	cropCanvas(20);
@@ -283,69 +131,144 @@ document.getElementById('btn-start').addEventListener('click', start);
 
 
 /**
+ * Returns an array holding the sequential data.
+ * Ignores lines that start with `>` (comments)
  * 
- * @param {*} file The file from an HTML Input type=file.
- * @param {number} chunk_size How big one read block is in bytes.
- * @param {function} callback Gets called per read block. The callback gets the read block passed into, use it.
+ * @param {string} data
  */
-function parseFile(file, chunk_size, callback) {
-	let offset = 0;
+function parseFASTAformat(data) {
+	const fasta = [];
+	const lines = data.toUpperCase().split('\n');
 
-	/**
-	 * Initializes the FileReader, which will call our handler after reading/failing.
-	 */
-	const read_block = () => {
-		let reader = new FileReader();
-		let blob = file.slice(offset, chunk_size + offset);
-		reader.onload = read_block_handler;
-		reader.readAsText(blob);
-	}
-	
-	const progress = $('#progress>span');
-	progress.removeClass('text-success text-danger').addClass('text-info');
-	
-	/**
-	 * Passes the now read block to the callback for processing.
-	 * 
-	 * Afterwards updates the progress bar.
-	 * 
-	 * After that, the reader is available for reading again, which we call.
-	 * 
-	 * @param {*} event 
-	 */
-	const read_block_handler = (event) => {
-		if(event.target.error == null) {
-			offset += event.target.result.length;
-			callback(event.target.result); // callback for handling read chunk
-			progress.html(((offset/file.size)*100).toFixed(1) + '%');
-		} 
-		else {
-			progress.removeClass('text-info').addClass('text-danger').html('ERROR!');
-			console.log("Read error: " + event.target.error);
-			return;
+	for (let i = 0; i < lines.length; i++) {
+		// ignore comment lines
+		if(lines[i][0] !== '>') {
+			for(let j = 0; j < lines[i].length; j++) {
+				fasta.push(lines[i][j]);
+			}
 		}
-		if(offset >= file.size) {			
-			progress.removeClass('text-info').addClass('text-success').html('100%');
-			console.log("Done reading");
-			return;
+	}
+
+	return fasta;
+}
+
+
+/**
+ * Applies settings, scrolls, hides help text and draws the sequence.
+ * @param {File} file 
+ */
+async function plotFASTAfile(file) {
+	applySettings();
+	document.getElementById('progress-text').scrollIntoView(true);
+	// hide help text
+	$('#unplotted-text').addClass('d-none');
+	const progress = $('#progress-text>span');
+	progress.removeClass('text-success text-danger').addClass('text-info');
+
+
+	let chunk_size = 1024*1024*4; // 4MB
+	let chunk_index = 1;
+	let total_chunks = Math.ceil((file.size/chunk_size), chunk_size);
+	console.log("There will be", total_chunks, "chunk/s.")
+
+	const scatter_x = [], scatter_y = [];
+	const cursor = { x: 0, y: 0 };
+	const file_reader = new FileReader();
+	let offset = 0;
+	let last_point = 0;
+	let datarevision = 0;
+	while (chunk_index <= total_chunks) {
+		console.log('----------------------');
+		
+		offset = (chunk_index - 1) * chunk_size;
+		console.log('Slicing from', offset, 'to', offset + chunk_size);
+		let blob = file.slice(offset, (offset + chunk_size));
+		const data = await new Promise((resolve, reject) => {
+			file_reader.onloadend = (event) => {
+				const target = (event.target);
+				if (target.error === null) {
+					offset += target.result.length;
+					resolve(target.result);
+				}
+				else {
+					reject(target.error);
+				}
+			};
+			file_reader.readAsText(blob);
+		});
+		const fasta_data = parseFASTAformat(data);
+		
+		for (let i = 0; i < fasta_data.length; i++) {
+			switch ( fasta_data[i] ) {
+				case 'A':
+					moveCursor(a_dir, cursor);
+				break;
+				case 'T':
+					moveCursor(t_dir, cursor);
+				break;
+				case 'G':
+					moveCursor(g_dir, cursor);
+				break;
+				case 'C':
+					moveCursor(c_dir, cursor);
+				break;
+				default:
+					moveCursor(x_dir, cursor);
+				break;
+			}
+
+			if(last_point % point_offset === 0) {
+				// console.log('Added point', cursor);
+				scatter_x.push(cursor.x);
+				scatter_y.push(cursor.y);
+			}
+
+			last_point++;
 		}
 		
-		// next chunk
-		read_block(offset, chunk_size);
+		const plotly_data = [
+			{
+				type: "scattergl",
+				mode: "markers",
+				marker: {
+					size: 3,
+					color: 'rgb(170, 0, 0)',
+					// line: {
+					// 	width: 1,
+					// 	color: 'rgb(0,0,0)'}
+				},
+				x: scatter_x,
+				y: scatter_y
+			}
+		];
+
+		datarevision += 1;
+		const plotly_layout = {
+			datarevision: datarevision
+		}
+		
+
+		Plotly.react('plot', plotly_data, plotly_layout);
+		let percentage = ((offset/file.size)*100).toFixed(1) + '%';
+		progress.html(percentage);
+		document.getElementById('progress-bar').style.width = percentage;
+		chunk_index++;
 	}
 	
-	// warning: "recursive"! read_block => handler => read_block => ...
-	read_block();
+	progress.removeClass('text-info').addClass('text-success').html('100%');
+
+	const plot = document.getElementById('plot');
+	console.log('----------------------------\nDone plotting. Report:');
+	console.log('- The plot holds: (', plot.data[0].x.length, ',', plot.data[0].y.length, ') points.');
+	console.log('- Offset:', point_offset,
+	',\n- Chunk size:', chunk_size,
+	',\n- Chunks:', chunk_index - 1,
+	',\n- Total calculated points:', last_point);
 }
 
 
 $('#file').change(() => {
 	const file = document.getElementById('file').files[0];
-	const chunk_size = 2048 * 1024;
-	parseFile(file, chunk_size, (data_chunk) => {
-		console.log("Chunk read!");
-		// console.log(data_chunk);
-	});
-
+	plotFASTAfile(file);
 });
 
