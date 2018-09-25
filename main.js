@@ -9,27 +9,13 @@ let a_dir, a_col = [0, 0, 0, 255],
 
 	canvas_w, canvas_h,
 	
-	point_offset;
-
-
-/**
- * Prints all the settings.
- * 
- * For debugging purposes.
- */
-function printSettings() {
-	console.log(
-		'a_dir:', a_dir, ', a_col:', a_col, '\n',
-		't_dir:', t_dir, ', t_col:', t_col, '\n',
-		'g_dir:', g_dir, ', g_col:', g_col, '\n',
-		'c_dir:', c_dir, ', c_col:', c_col, '\n', 
-		'x_dir:', x_dir, 'x_col:', x_col, '\n', '\n',
-
-		'x_start:', x_start, ', y_start:', y_start, '\n', 
-		
-		'canvas_w:', canvas_w, ', canvas_h:', canvas_h, '\n', '\n',
-	);
-}
+	point_offset,
+	
+	is_color_enabled = true,
+	
+	in_file,
+	
+	point_size = 3;
 
 
 /**
@@ -121,9 +107,15 @@ function moveCursor(direction, cursor) {
 
 
 function start() {
+	if(in_file === undefined) {
+		alert("Error: No file was specified. Select a file before drawing.");
+		return;
+	}
 	applySettings();
-	cropCanvas(20);
-	draw();
+	$('#plot').addClass('fullscreen');
+	document.getElementById('progress-text').scrollIntoView(true);
+	$('#unplotted-text').addClass('d-none');
+	plotFASTAfile(in_file);
 }
 
 
@@ -154,23 +146,23 @@ function parseFASTAformat(data) {
 
 
 /**
- * Applies settings, scrolls, hides help text and draws the sequence.
+ * 
  * @param {File} file 
  */
 async function plotFASTAfile(file) {
-	applySettings();
-	document.getElementById('progress-text').scrollIntoView(true);
-	// hide help text
-	$('#unplotted-text').addClass('d-none');
+	// Delete the old plot if it exists,
+	// because otherwise Plotly.react won't update the plot.
+	Plotly.purge('plot');
+	
 	const progress = $('#progress-text>span');
 	progress.removeClass('text-success text-danger').addClass('text-info');
-
 
 	let chunk_size = 1024*1024*4; // 4MB
 	let chunk_index = 1;
 	let total_chunks = Math.ceil((file.size/chunk_size), chunk_size);
 	console.log("There will be", total_chunks, "chunk/s.")
 
+	const colors = [[]];
 	const scatter_x = [], scatter_y = [];
 	const cursor = { x: 0, y: 0 };
 	const file_reader = new FileReader();
@@ -178,10 +170,7 @@ async function plotFASTAfile(file) {
 	let last_point = 0;
 	let datarevision = 0;
 	while (chunk_index <= total_chunks) {
-		console.log('----------------------');
-		
 		offset = (chunk_index - 1) * chunk_size;
-		console.log('Slicing from', offset, 'to', offset + chunk_size);
 		let blob = file.slice(offset, (offset + chunk_size));
 		const data = await new Promise((resolve, reject) => {
 			file_reader.onloadend = (event) => {
@@ -202,18 +191,23 @@ async function plotFASTAfile(file) {
 			switch ( fasta_data[i] ) {
 				case 'A':
 					moveCursor(a_dir, cursor);
+					if(is_color_enabled) {colors[0].push(a_col);}
 				break;
 				case 'T':
 					moveCursor(t_dir, cursor);
+					if(is_color_enabled) {colors[0].push(t_col);}
 				break;
 				case 'G':
 					moveCursor(g_dir, cursor);
+					if(is_color_enabled) {colors[0].push(g_col);}
 				break;
 				case 'C':
 					moveCursor(c_dir, cursor);
+					if(is_color_enabled) {colors[0].push(c_col);}
 				break;
 				default:
 					moveCursor(x_dir, cursor);
+					if(is_color_enabled) {colors[0].push(x_col);}
 				break;
 			}
 
@@ -231,7 +225,7 @@ async function plotFASTAfile(file) {
 				type: "scattergl",
 				mode: "markers",
 				marker: {
-					size: 3,
+					size: point_size,
 					color: 'rgb(170, 0, 0)',
 					// line: {
 					// 	width: 1,
@@ -257,6 +251,10 @@ async function plotFASTAfile(file) {
 	
 	progress.removeClass('text-info').addClass('text-success').html('100%');
 
+	if(is_color_enabled) {
+		Plotly.restyle('plot', 'marker.color', colors);
+	}
+
 	const plot = document.getElementById('plot');
 	console.log('----------------------------\nDone plotting. Report:');
 	console.log('- The plot holds: (', plot.data[0].x.length, ',', plot.data[0].y.length, ') points.');
@@ -268,7 +266,6 @@ async function plotFASTAfile(file) {
 
 
 $('#file').change(() => {
-	const file = document.getElementById('file').files[0];
-	plotFASTAfile(file);
+	in_file = document.getElementById('file').files[0];
 });
 

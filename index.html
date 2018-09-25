@@ -25,7 +25,7 @@
 		
 		<div class="row">
 			<div class="col">
-				<h5 class="text-left" title="asd">1. Direction:</h5>
+				<h5 class="text-left" title="asd">Base-Config:</h5>
 			</div>
 		</div>
 		<div class="row text-center">
@@ -41,6 +41,7 @@
 					<option value="SW">DOWN-LEFT</option>
 					<option value="SE">DOWN+RIGHT</option>
 				</select>
+				<input id="a-col" type="color" value="#FF0000" class="mt-3 form-control color-picker">
 			</div>
 
 			<div class="col-sm-4 col-lg-2 col-6 mt-2">
@@ -54,7 +55,8 @@
 					<option value="NE">UP+RIGHT</option>
 					<option value="SW">DOWN-LEFT</option>
 					<option value="SE">DOWN+RIGHT</option>
-				</select>			
+				</select>
+				<input id="t-col" type="color" value="#00FF00" class="mt-3 form-control color-picker">
 			</div>
 			
 			<div class="col-sm-4 col-lg-2 col-6 mt-2">
@@ -68,7 +70,8 @@
 					<option value="NE">UP+RIGHT</option>
 					<option value="SW">DOWN-LEFT</option>
 					<option value="SE">DOWN+RIGHT</option>
-				</select>		
+				</select>
+				<input id="g-col" type="color" value="#0000FF" class="mt-3 form-control color-picker">
 			</div>
 			
 			<div class="col-sm-4 col-lg-2 col-6 mt-2">
@@ -82,7 +85,8 @@
 					<option value="NE">UP+RIGHT</option>
 					<option value="SW">DOWN+LEFT</option>
 					<option value="SE">DOWN+RIGHT</option>
-				</select>		
+				</select>
+				<input id="c-col" type="color" value="#FFFF00" class="mt-3 form-control color-picker">
 			</div>
 			
 			<div class="col-sm-4 col-lg-2 col-6 offset-6 offset-sm-0 mt-2">
@@ -99,36 +103,7 @@
 					<option value="SW">DOWN+LEFT</option>
 					<option value="SE">DOWN+RIGHT</option>
 				</select>		
-			</div>
-		</div>
-
-		<hr>
-		
-		<div class="row mt-3">
-			<div class="col">
-				<h5 class="text-left">2. Color:</h5>
-			</div>
-		</div>
-		<div class="row text-center">
-			<div class="col-sm-2 offset-md-1 col-6 mt-2">
-				<label for="a-col"><b>A</b>=</label>
-				<input id="a-col" type="color" value="#FF0000" class="form-control color-picker">
-			</div>
-			<div class="col-sm-2 col-6 mt-2">
-				<label for="t-col"><b>T</b>=</label>
-				<input id="t-col" type="color" value="#00FF00" class="form-control color-picker">
-			</div>
-			<div class="col-sm-2 col-6 mt-2">
-				<label for="g-col"><b>G</b>=</label>
-				<input id="g-col" type="color" value="#0000FF" class="form-control color-picker">
-			</div>
-			<div class="col-sm-2 col-6 mt-2">
-				<label for="c-col"><b>C</b>=</label>
-				<input id="c-col" type="color" value="#FFFF00" class="form-control color-picker">
-			</div>
-			<div class="col-sm-2 col-6 offset-6 offset-sm-0 mt-2">
-				<label for="x-col"><b>UNKNOWN</b>=</label>
-				<input id="x-col" type="color" class="form-control color-picker">
+				<input id="x-col" type="color" class="mt-3 form-control color-picker">
 			</div>
 		</div>
 		
@@ -136,38 +111,30 @@
 		
 		<div class="row mt-3">
 			<div class="col">
-				<h5 class="text-left">3. DNA:</h5>
+				<h5 class="text-left">Data-Config:</h5>
 			</div>
 		</div>
 
 		<div class="row text-right">
-			<div class="col-sm-6">
-				<!-- <label for="dna-seq">Sequence=</label> -->
-				<textarea type="text" id="dna-seq" class="form-control d-inline-block w-75" >cggacacacaaaaagaaagaagaatttttaggatcttttgtgtgcgaataactatgaggaagattaataattttcctctcattgaaatttatatcggaatttaaattgaaattgttactgtaatcacacctggtttgtttcagagccacatcacaaagatagagaacaacctaggtctccgaagggagcaagggcatcagtgtgctcagttgaaaatcccttgtcaacacctaggtcttatcacatcacaagttccacctcagactctgcagggtgatccaacaaccttaatagaaacattattgttaaaggacagcattagttcacagtcaaacaagcaagattgagaattaaccttggttttgaacttgaacacttaggggattgaagattcaacaaccctaaagcttggggtaaaacattggaaatagttaaaagacaaattgctcggaatcacaaaattccgagtatggattctcgtcctcagaaaatctggatggcgccgagtctcactgaatctgacatggattaccacaagatcttgacagcaggtctgtccgttcaacaggggattgttcggcaaagagtcatcccagtgtatcaagtaaacaatcttgaagaaatttgccaacttatcatacaggcctttgaagcaggtgttgattttcaagagagtgcggacagtttccttctcatgctttgtcttcatcatgcgtaccagggagattacaaacttttcttggaaagtggcgcagtcaagtatttggaagggcacgggttccgttttgaagtcaagaagcgtgatggagtgaagcgccttgaggaattgctgccagcagtatctagtggaaaaaacattaagagaacacttgctgccatgccggaagaggagacaactgaagctaatgccggtcagtttctctcctttgcaagtctattccttccgaaattggtagtaggagaaaaggcttgccttgagaaggttcaaaggcaaattcaagtacatgcagagcaaggactgatacaatatccaacagcttggcaatcagtaggacacatgatggtgattttccgtttgatgcgaacaaattttctgatcaaatttctcctaatacaccaagggatgcacatggttgccgggcatgatgccaacgatgctgtgatttcaaattcagtggctcaagctcgtttttcaggcttattgattgtcaaaacagtacttgatcatatcctacaaaagacagaacgaggagttcgtctccatcctcttgcaaggaccgccaaggtaaaaaatgaggtgaactcctttaaggctgcactcagctccctggccaagcatggagagtatgctcctttcgcccgacttttgaacctttctggagtaaataatcttgagcatggtcttttccctcaactatcggcaattgcactcggagtcgccacagcacacgggagtaccctcgcaggagtaaatgttggagaacagtatcaacaactcagagaggctgccactgaggctgagaagcaactccaacaatatgcagagtctcgcgaacttgaccatcttggacttgatgatcaggaaaagaaaattcttatgaacttccatcagaaaaagaacgaaatcagcttccagcaaacaaacgctatggtaactctaagaaaagagcgcctggccaagctgacagaagctatcactgctgcgtcactgcccaaaacaagtggacattacgatgatgatgacgacattccctttccaggacccatcaatgatgacgacaatcctggccatcaagatgatgatccgactgactcacaggatacgaccattcccgatgtggtggttgatcccgatgatggaagctacggcgaataccagagttactcggaaaacggcatgaatgcaccagatgacttggtcctattcgatctagacgaggacgacgaggacactaagccagtgcctaatagatcgaccaagggtggacaacagaagaacagtcaaaagggccagcatatagagggcagacagacacaatccaggccaattcaaaatgtcccaggccctcacagaacaatccaccacgccagtgcgccactcacggacaatgacagaagaaatgaaccctccggctcaaccagccctcgcatgctgacaccaattaacgaagaggcagacccactggacgatgccgacgacgagacgtctagccttccgcccttggagtcagatgatgaagagcaggacagggacggaacttccaaccgcacacccactgtcgccccaccggctcccgtatacagagatcactctgaaaagaaagaactcccgcaagacgagcaacaagatcaggaccacactcaagaggccaggaaccaggacagtgacaacacccagtcagaacactcttttgaggagatgtatcgccacattctaagatcacaggggccatttgatgctgttttgtattatcatatgatgaaggatgagcctgtagttttcagtaccagtgatggcaaagagtacacgtatccagactcccttgaagaggaatatccaccatggctcactgaaaaagaggctatgaatgaagagaatagatttgttacattggatggtcaacaattttattggccggtgatgaatcacaagaataaattcatggcaatcctgcaacatcatcagtgaatgagcatggaacaatgggatgattcaaccgacaaatagctaacattaagtagtcaaggaacgaaaacaggaagaatttttgatgtctaaggtgtgaattattatcacaataaaagtgattcttatttttgaatttaaagctagcttattattactagccgtttttcaaagttcaatttgagtcttaatgcaaataggcgttaagccacagttatagccataattgtaactcaatattctaactagcgatttatctaaattaaattacattatgcttttataacttacctactagcctgcccaacatttacacgatcgttttataattaagaaaaaactaatgatgaagattaaaaccttcatcatccttacgtcaattgaattctctagcactcgaagcttattgtcttcaatgtaaaagaaaagctggtctaacaagatgacaactagaacaaagggcaggggccatactgcggccacgactcaaaacgacagaatgccaggccctgagctttcgggctggatctctgagcagctaatgaccggaagaattcctgtaagcgacatcttctgtgatattgagaacaatccaggattatgctacgcatcccaaatgcaacaaacgaagccaaacccgaagacgcgcaacagtcaaacccaaacggacccaatttgcaatcatagttttgaggaggtagtacaaacattggcttcattggctactgttgtgcaacaacaaaccatcgcatcagaatcattagaacaacgcattacgagtcttgagaatggtctaaagccagtttatgatatggcaaaaacaatctcctcattgaacagggtttgtgctgagatggttgcaaaatatgatcttctggtgatgacaaccggtcgggcaacagcaaccgctgcggcaactgaggcttattgggccgaacatggtcaaccaccacctggaccatcactttatgaagaaagtgcgattcggggtaagattgaatctagagatgagaccgtccctcaaagtgttagggaggcattcaacaatctaaacagtaccacttcactaactgaggaaaattttgggaaacctgacatttcggcaaaggatttgagaaacattatgtatgatcacttgcctggttttggaactgctttccaccaattagtacaagtgatttgtaaattgggaaaagatagcaactcattggacatcattcatgctgagttccaggccagcctggctgaaggagactctcctcaatgtgccctaattcaaattacaaaaagagttccaatcttccaagatgctgctccacctgtcatccacatccgctctcgaggtgacattccccgagcttgccagaaaagcttgcgtccagtcccaccatcgcccaagattgatcgaggttgggtatgtgtttttcagcttcaagatggtaaaacacttggactcaaaatttgagccaatctcccttccctccgaaagaggcgaataatagcagaggcttcaactgctgaactatagggtacgttacattaatgatacacttgtgagtatcagccctggataatataagtcaattaaacgaccaagataaaattgttcatatctcgctagcagcttaaaatataaatgtaataggagctatatctctgacagtattataatcaattgttattaagtaacccaaaccaaaagtgatgaagattaagaaaaacctacctcggctgagagagtgttttttcattaaccttcatcttgtaaacgttgagcaaaattgttaaaaatatgaggcgggttatattgcctactgctcctcctgaatatatggaggccatataccctgtcaggtcaaattcaacaattgctagaggtggcaacagcaatacaggcttcctgacaccggagtcagtcaatggggacactccatcgaatccactcaggccaattgccgatgacaccatcgaccatgccagccacacaccaggcagtgtgtcatcagcattcatccttgaagctatggtgaatgtcatatcgggccccaaagtgctaatgaagcaaattccaatttggcttcctctaggtgtcgctgatcaaaagacctacagctttgactcaactacggccgccatcatgcttgcttcatacactatcacccatttcggcaaggcaaccaatccacttgtcagagtcaatcggctgggtcctggaatcccggatcatcccctcaggctcctgcgaattggaaaccaggctttcctccaggagttcgttcttccgccagtccaactaccccagtatttcacctttgatttgacagcactcaaactgatcacccaaccactgcctgctgcaacatggaccgatgacactccaacaggatcaaatggagcgttgcgtccaggaatttcatttcatccaaaacttcgccccattcttttacccaacaaaagtgggaagaaggggaacagtgccgatctaacatctccggagaaaatccaagcaataatgacttcactccaggactttaagatcgttccaattgatccaaccaaaaatatcatgggaatcgaagtgccagaaactctggtccacaagctgaccggtaagaaggtgacttctaaaaatggacaaccaatcatccctgttcttttgccaaagtacattgggttggacccggtggctccaggagacctcaccatggtaatcacacaggattgtgacacgtgtcattctcctgcaagtcttccagctgtgattgagaagtaattgcaataattgactcagatccagttttatagaatcttctcagggatagtgataacatctatttagtaatccgtccattagaggagacacttttaattgatcaatatactaaaggtgctttacaccattgtcttttttctctcctaaatgtagaacttaacaaaagactcataatatacttgtttttaaaggattgattgatgaaagatcataactaataacattacaaataatcctactataatcaatacggtgattcaaatgttaatctttctcattgcacatactttttgcccttatcctcaaattgcctgcatgcttacatctgaggatagccagtgtgacttggattggaaatgtggagaaaaaatcgggacccatttctaggttgttcacaatccaagtacagacattgcccttctaattaagaaaaaatcggcgatgaagattaagccgacagtgagcgtaatcttcatctctcttagattatttgttttccagagtaggggtcgtcaggtccttttcaatcgtgtaaccaaaataaactccactagaaggatattgtggggcaacaacacaatgggcgttacaggaatattgcagttacctcgtgatcgattcaagaggacatcattctttctttgggtaattatccttttccaaagaacattttccatcccacttggagtcatccacaatagcacattacaggttagtgatgtcgacaaactagtttgtcgtgacaaactgtcatccacaaatcaattgagatcagttggactgaatctcgaagggaatggagtggcaactgacgtgccatctgcaactaaaagatggggcttcaggtccggtgtcccaccaaaggtggtcaattatgaagctggtgaatgggctgaaaactgctacaatcttgaaatcaaaaaacctgacgggagtgagtgtctaccagcagcgccagacgggattcggggcttcccccggtgccggtatgtgcacaaagtatcaggaacgggaccgtgtgccggagactttgccttccataaagagggtgctttcttcctgtatgatcgacttgcttccacagttatctaccgaggaacgactttcgctgaaggtgtcgttgcatttctgatactgccccaagctaagaaggacttcttcagctcacaccccttgagagagccggtcaatgcaacggaggacccgtctagtggctactattctaccacaattagatatcaggctaccggttttggaaccaatgagacagagtacttgttcgaggttgacaatttgacctacgtccaacttgaatcaagattcacaccacagtttctgctccagctgaatgagacaatatatacaagtgggaaaaggagcaataccacgggaaaactaatttggaaggtcaaccccgaaattgatacaacaatcggggagtgggccttctgggaaactaaaaaaacctcactagaaaaattcgcagtgaagagttgtctttcacagttgtatcaaacggagccaaaaacatcagtggtcagagtccggcgcgaacttcttccgacccagggaccaacacaacaactgaagaccacaaaatcatggcttcagaaaattcctctgcaatggttcaagtgcacagtcaaggaagggaagctgcagtgtcgcatctaacaacccttgccacaatctccacgagtccccaatccctcacaaccaaaccaggtccggacaacagcacccataatacacccgtgtataaacttgacatctctgaggcaactcaagttgaacaacatcaccgcagaacagacaacgacagcacagcctccgacactccctctgccacgaccgcagccggacccccaaaagcagagaacaccaacacgagcaagagcactgacttcctggaccccgccaccacaacaagtccccaaaaccacagcgagaccgctggcaacaacaacactcatcaccaagataccggagaagagagtgccagcagcgggaagctaggcttaattaccaatactattgctggagtcgcaggactgatcacaggcgggagaagaactcgaagagaagcaattgtcaatgctcaacccaaatgcaaccctaatttacattactggactactcaggatgaaggtgctgcaatcggactggcctggataccatatttcgggccagcagccgagggaatttacatagaggggctaatgcacaatcaagatggtttaatctgtgggttgagacagctggccaacgagacgactcaagctcttcaactgttcctgagagccacaactgagctacgcaccttttcaatcctcaaccgtaaggcaattgatttcttgctgcagcgatggggcggcacatgccacattctgggaccggactgctgtatcgaaccacatgattggaccaagaacataacagacaaaattgatcagattattcatgattttgttgataaaacccttccggaccagggggacaatgacaattggtggacaggatggagacaatggataccggcaggtattggagttacaggcgttataattgcagttatcgctttattctgtatatgcaaatttgtcttttagtttttcttcagattgcttcatggaaaagctcagcctcaaatcaatgaaaccaggatttaattatatggattacttgaatctaagattacttgacaaatgataatataatacactggagctttaaacatagccaatgtgattctaactcctttaaactcacagttaatcataaacaaggtttgacatcaatctagttatctctttgagaatgataaacttgatgaagattaagaaaaaggtaatctttcgattatctttaatcttcatccttgattctacaatcatgacagttgtctttagtgacaagggaaagaagcctttttattaagttgtaataatcagatctgcgaaccggtagagtttagttgcaacctaacacacataaagcattggtcaaaaagtcaatagaaatttaaacagtgagtggagacaacttttaaatggaagcttcatatgagagaggacgcccacgagctgccagacagcattcaagggatggacacgaccaccatgttcgagcacgatcatcatccagagagaattatcgaggtgagtaccgtcaatcaaggagcgcctcacaagtgcgcgttcctactgtatttcataagaagagagttgaaccattaacagttcctccagcacctaaagacatatgtccgaccttgaaaaaaggatttttgtgtgacagtagtttttgcaaaaaagatcaccagttggagagtttaactgatagggaattactcctactaatcgcccgtaagacttgtggatcagtagaacaacaattaaatataactgcacccaaggactcgcgcttagcaaatccaacggctgatgatttccagcaagaggaaggtccaaaaattaccttgttgacactgatcaagacggcagaacactgggcgagacaagacatcagaaccatagaggattcaaaattaagagcattgttgactctatgtgctgtgatgacgaggaaattctcaaaatcccagctgagtcttttatgtgagacacacctaaggcgcgaggggcttgggcaagatcaggcagaacccgttctcgaagtatatcaacgattacacagtgataaaggaggcagttttgaagctgcactatggcaacaatgggaccgacaatccctaattatgtttatcactgcattcttgaatattgctctccagttaccgtgtgaaagttctgctgtcgttgtttcagggttaagaacattggttcctcaatcagataatgaggaagcttcaaccaacccggggacatgctcatggtctgatgagggtaccccttaataaggctgactaaaacactatataaccttctacttgatcacaatactccgtatacctatcatcatatatttaatcaagacgatatcctttaaaacttattcagtactataatcactctcgtttcaaattaataagatgtgcatgattgccctaatatatgaagaggtatgatacaaccctaacagtgatcaaagaaaatcataatctcgtatcgctcgtaatataacctgccaagcatacctcttgcacaaagtgattcttgtacacaaataatgttttactctacaggaggtagcaacgatccatcccatcaaaaaataagtatttcatgacttactaatgatctcttaaaatattaagaaaaactgacggaacataaattctttatgcttcaagctgtggaggaggtgtttggtattggctattgttatattacaatcaataacaagcttgtaaaaatattgttcttgtttcaagaggtagattgtgaccggaaatgctaaactaatgatgaagattaatgcggaggtctgataagaataaaccttattattcagattaggccccaagaggcattcttcatctccttttagcaaagtactatttcagggtagtccaattagtggcacgtcttttagctgtatatcagtcgcccctgagatacgccacaaaagtgtctctaagctaaattggtctgtacacatcccatacattgtattaggggcaataatatctaattgaacttagccgtttaaaatttagtgcataaatctgggctaacaccaccaggtcaactccattggctgaaaagaagcttacctacaacgaacatcactttgagcgccctcacaattaaaaaataggaacgtcgttccaacaatcgagcgcaaggtttcaaggttgaactgagagtgtctagacaacaaaatattgatactccagacaccaagcaagacctgagaaaaaaccatggctaaagctacgggacgatacaatctaatatcgcccaaaaaggacctggagaaaggggttgtcttaagcgacctctgtaacttcttagttagccaaactattcaggggtggaaggtttattgggctggtattgagtttgatgtgactcacaaaggaatggccctattgcatagactgaaaactaatgactttgcccctgcatggtcaatgacaaggaatctctttcctcatttatttcaaaatccgaattccacaattgaatcaccgctgtgggcattgagagtcatccttgcagcagggatacaggaccagctgattgaccagtctttgattgaacccttagcaggagcccttggtctgatctctgattggctgctaacaaccaacactaaccatttcaacatgcgaacacaacgtgtcaaggaacaattgagcctaaaaatgctgtcgttgattcgatccaatattctcaagtttattaacaaattggatgctctacatgtcgtgaactacaacggattgttgagcagtattgaaattggaactcaaaatcatacaatcatcataactcgaactaacatgggttttctggtggagctccaagaacccgacaaatcggcaatgaaccgcatgaagcctgggccggcgaaattttccctccttcatgagtccacactgaaagcatttacacaaggatcctcgacacgaatgcaaagtttgattcttgaatttaatagctctcttgctatctaactaaggtagaatacttcatattgagctaactcatatatgctgactcaatagttatcttgacatctctgctttcataatcagatatataagcataataaataaatactcatatttcttgataatttgtttaaccacagataaatcctcactgtaagccagcttccaagttgacacccttacaaaaaccaggactcagaatccctcaaacaagagattccaagacaacatcatagaattgctttattatatgaataagcattttatcaccagaaatcctatatactaaatggttaattgtaactgaacccgcaggtcacatgtgttaggtttcacagattctatatattactaactctatactcgtaattaacattagataagtagattaagaaaaaagcctgaggaagattaagaaaaactgcttattgggtctttccgtgttttagatgaagcagttgaaattcttcctcttgatattaaatggctacacaacatacccaatacccagacgctaggttatcatcaccaattgtattggaccaatgtgacctagtcactagagcttgcgggttatattcatcatactcccttaatccgcaactacgcaactgtaaactcccgaaacatatctaccgtttgaaatacgatgtaactgttaccaagttcttgagtgatgtaccagtggcgacattgcccatagatttcatagtcccagttcttctcaaggcactgtcaggcaatggattctgtcctgttgagccgcggtgccaacagttcttagatgaaatcattaagtacacaatgcaagatgctctcttcttgaaatattatctcaaaaatgtgggtgctcaagaagactgtgttgatgaacactttcaagagaaaatcttatcttcaattcagggcaatgaatttttacatcaaatgtttttctggtatgatctggctattttaactcgaaggggtagattaaatcgaggaaactctagatcaacatggtttgttcatgatgatttaatagacatcttaggctatggggactatgttttttggaagatcccaatttcaatgttaccactgaacacacaaggaatcccccatgctgctatggactggtatcaggcatcagtattcaaagaagcggttcaagggcatacacacattgtttctgtttctactgccgacgtcttgataatgtgcaaagatttaattacatgtcgattcaacacaactctaatctcaaaaatagcagagattgaggatccagtttgttctgattatcccaattttaagattgtgtctatgctttaccagagcggagattacttactctccatattagggtctgatgggtataaaattattaagttcctcgaaccattgtgcttggccaaaattcaattatgctcaaagtacactgagaggaagggccgattcttaacacaaatgcatttagctgtaaatcacaccctagaagaaattacagaaatgcgtgcactaaagccttcacaggctcaaaagatccgtgaattccatagaacattgataaggctggagatgacgccacaacaactttgtgagctattttccattcaaaaacactgggggcatcctgtgctacatagtgaaacagcaatccaaaaagttaaaaaacatgctacggtgctaaaagcattacgccctatagtgattttcgagacatactgtgtttttaaatatagtattgccaaacattattttgatagtcaaggatcttggtacagtgttacttcagataggaatctaacaccgggtcttaattcttatatcaaaagaaatcaattccctccgttgccaatgattaaagaactactatgggaattttaccaccttgaccaccctccacttttctcaaccaaaattattagtgacttaagtatttttataaaagacagagctaccgcagtagaaaggacatgctgggatgcagtattcgagcctaatgttctaggatataatccacctcacaaatttagtactaaacgtgtaccggaacaatttttagagcaagaaaacttttctattgagaatgttctttcctacgcacaaaaactcgagtatctactaccacaatatcggaacttttctttctcattgaaagagaaagagttgaatgtaggtagaaccttcggaaaattgccttatccgactcgcaatgttcaaacactttgtgaagctctgttagctgatggtcttgctaaagcatttcctagcaatatgatggtagttacggaacgtgagcaaaaagaaagcttattgcatcaagcatcatggcaccacacaagtgatgattttggtgaacatgccacagttagagggagtagctttgtaactgatttagagaaatacaatcttgcatttagatatgagtttacagcaccttttatagaatattgcaaccgttgctatggtgttaagaatgtttttaattggatgcattatacaatcccacagtgttatatgcatgtcagtgattattataatccaccacataacctcacactggagaatcgagacaacccccccgaagggcctagttcatacaggggtcatatgggagggattgaaggactgcaacaaaaactctggacaagtatttcatgtgctcaaatttctttagttgaaattaagactggttttaagttacgctcagctgtgatgggtgacaatcagtgcattactgttttatcagtcttccccttagagactgacgcagacgagcaggaacagagcgccgaagacaatgcagcgagggtggccgccagcctagcaaaagttacaagtgcctgtggaatctttttaaaacctgatgaaacatttgtacattcaggttttatctattttggaaaaaaacaatatttgaatggggtccaattgcctcagtcccttaaaacggctacaagaatggcaccattgtctgatgcaatttttgatgatcttcaagggaccctggctagtataggcactgcttttgagcgatccatctctgagacacgacatatctttccttgcaggataaccgcagctttccatacgtttttttcggtgagaatcttgcaatatcatcatctcgggttcaataaaggttttgaccttggacagttaacactcggcaaacctctggatttcggaacaatatcattggcactagcggtaccgcaggtgcttggagggttatccttcttgaatcctgagaaatgtttctaccggaatctaggagatccagttacctcaggcttattccagttaaaaacttatctccgaatgattgagatggatgatttattcttacctttaattgcgaagaaccctgggaactgcactgccattgactttgtgctaaatcctagcggattaaatgtccctgggtcgcaagacttaacttcatttctgcgccagattgtacgcaggaccatcaccctaagtgcgaaaaacaaacttattaataccttatttcatgcgtcagctgacttcgaagacgaaatggtttgtaaatggctattatcatcaactcctgttatgagtcgttttgcggccgatatcttttcacgcacgccgagcgggaagcgattgcaaattctaggatacctggaaggaacacgcacattattagcctctaagatcatcaacaataatacagagacaccggttttggacagactgaggaaaataacattgcaaaggtggagcctatggtttagttatcttgatcattgtgataatatcctggcggaggctttaacccaaataacttgcacagttgatttagcacagattctgagggaatattcatgggctcatattttagagggaagacctcttattggagccacactcccatgtatgattgagcaattcaaagtgttttggctgaaaccctacgaacaatgtccgcagtgttcaaatgcaaagcaaccaggtgggaaaccattcgtgtcagtggcagtcaagaaacatattgttagtgcatggccgaacgcatcccgaataagctggactatcggggatggaatcccatacattggatcaaggacagaagataagataggacaacctgctattaaaccaaaatgtccttccgcagccttaagagaggccattgaattggcgtcccgtttaacatgggtaactcaaggcagttcgaacagtgacttgctaataaaaccatttttggaagcacgagtaaatttaagtgttcaagaaatacttcaaatgaccccttcacattactcaggaaatattgttcacaggtacaacgatcaatacagtcctcattctttcatggccaatcgtatgagtaattcagcaacgcgattgattgtttctacaaacactttaggtgagttttcaggaggtggccagtctgcacgcgacagcaatattattttccagaatgttataaattatgcagttgcactgttcgatattaaatttagaaacactgaggctacagatatccaatataatcgtgctcaccttcatctaactaagtgttgcacccgggaagtaccagctcagtatttaacatacacatctacattggatttagatttaacaagataccgagaaaacgaattgatttatgacagtaatcctctaaaaggaggactcaattgcaatatctcattcgataatccatttttccaaggtaaacggctgaacattatagaagatgatcttattcgactgcctcacttatctggatgggagctagccaagaccatcatgcaatcaattatttcagatagcaacaattcatctacagacccaattagcagtggagaaacaagatcattcactacccatttcttaacttatcccaagataggacttctgtacagttttggggcctttgtaagttattatcttggcaatacaattcttcggactaagaaattaacacttgacaattttttatattacttaactactcaaattcataatctaccacatcgctcattgcgaatacttaagccaacattcaaacatgcaagcgttatgtcacggttaatgagtattgatcctcatttttctatttacataggcggtgctgcaggtgacagaggactctcagatgcggccaggttatttttgagaacgtccatttcatcttttcttacatttgtaaaagaatggataattaatcgcggaacaattgtccctttatggatagtatatccgctagagggtcaaaacccaacacctgtgaataattttctctatcagatcgtagaactgctggtgcatgattcatcaagacaacaggcttttaaaactaccataagtgatcatgtacatcctcacgacaatcttgtttacacatgtaagagtacagccagcaatttcttccatgcatcattggcgtactggaggagcagacacagaaacagcaaccgaaaatacttggcaagagactcttcaactggatcaagcacaaacaacagtgatggtcatattgagagaagtcaagaacaaaccaccagagatccacatgatggcactgaacggaatctagtcctacaaatgagccatgaaataaaaagaacgacaattccacaagaaaacacgcaccagggtccgtcgttccagtcctttctaagtgactctgcttgtggtacagcaaatccaaaactaaatttcgatcgatcgagacacaatgtgaaatttcaggatcataactcggcatccaagagggaaggtcatcaaataatctcacaccgtctagtcctacctttctttacattatctcaagggacacgccaattaacgtcatccaatgagtcacaaacccaagacgagatatcaaagtacttacggcaattgagatccgtcattgataccacagtttattgtagatttaccggtatagtctcgtccatgcattacaaacttgatgaggtcctttgggaaatagagagtttcaagtcggctgtgacgctagcagagggagaaggtgctggtgccttactattgattcagaaataccaagttaagaccttatttttcaacacgctagctactgagtccagtatagagtcagaaatagtatcaggaatgactactcctaggatgcttctacctgttatgtcaaaattccataatgaccaaattgagattattcttaacaactcagcaagccaaataacagacataacaaatcctacttggtttaaagaccaaagagcaaggctacctaagcaagtcgaggttataaccatggatgcagagacaacagagaatataaacagatcgaaattgtacgaagctgtatataaattgatcttacaccatattgatcctagcgtattgaaagcagtggtccttaaagtctttctaagtgatactgagggtatgttatggctaaatgataatttagccccgttttttgccactggttatttaattaagccaataacgtcaagtgctagatctagtgagtggtatctttgtctgacgaacttcttatcaactacacgtaagatgccacaccaaaaccatctcagttgtaaacaggtaatacttacggcattgcaactgcaaattcaacgaagcccatactggctaagtcatttaactcagtatgctgactgtgagttacatttaagttatatccgccttggttttccatcattagagaaagtactataccacaggtataacctcgtcgattcaaaaagaggtccactagtctctatcactcagcacttagcacatcttagagcagagattcgagaattaactaatgattataatcaacagcgacaaagtcggactcaaacatatcactttattcgtactgcaaaaggacgaatcacaaaactagtcaatgattatttaaaattctttcttattgtgcaagcattaaaacataatgggacatggcaagctgagtttaagaaattaccagagttgattagtgtgtgcaataggttctaccatattagagattgcaattgtgaagaacgtttcttagttcaaaccttatatttacatagaatgcaggattctgaagttaagcttatcgaaaggctgacagggcttctgagtttatttccggatggtctctacaggtttgattgaattaccgtgcatagtatcctgatacttgcaaaggttggttattaacatacagattataaaaaactcataaattgctctcatacatcatattgatctaatctcaataaacaactatttaaataacgaaaggagtccctatattatatactatatttagcctctctccctgcgtgataatcaaaaaattcacaatgcagcatgtgtgacatattactgccgcaatgaatttaacgcaacataataaactctgcactctttataattaagctttaacgaaaggtctgggctcatattgttattgatataataatgttgtatcaatatcctgtcagatggaatagtgttttggttgataacacaacttcttaaaacaaaattgatctttaagattaagttttttataattatcattactttaatttgtcgttttaaaaacggtgatagccttaatctttgtgtaaaataagagattaggtgtaataaccttaacatttttgtctagtaagctactatttcatacagaatgataaaattaaaagaaaaggcaggactgtaaaatcagaaataccttctttacaatatagcagactagataataatcttcgtgttaatgataattaagacattgaccacgctcatcagaaggctcgccagaataaacgttgcaaaaaggattcctggaaaaatggtcgcacacaaaaatttaaaaataaatctatttcttcttttttgtgtgtcca
-				</textarea>
-				<button class="btn btn-primary w-75" id="btn-start">
-					<b>DRAW</b>
-				</button>
-				<p class="text-muted d-block d-lg-none mt-3">Tip: Zoom out to see the whole canvas!</p>
-			</div>
-			<div class="col-sm-1">
-				<p>
-					or
-				</p>
-			</div>
 			<div class="col-sm-4">
 				<label for="file" class="btn btn-info w-75">
 					<b>Open FASTA File</b> <input type="file" accept=".fa, .mpfa, .fna, .fsa, .fasta" id="file" hidden>
 				</label>
 				<label for="offset" class="w-75">
 					<b class="d-inline-block mr-3" title="For large sequences it could be necessary to only draw X point for performance reasons.">
-						Offset<sup><u>?</u></sup>
+						Resolution<sup><u>?</u></sup>
 					</b> 
-					<input type="number" id="offset" class="form-control d-inline-block w-50" placeholder="Draw every X point" value="5">
+					<input type="number" min="1" max="4194300" id="offset" class="form-control d-inline-block w-50" placeholder="Draw every X point" value="5">
 				</label>
 			</div>
 		</div>
 
+		<hr>
+
+		<button class="btn btn-primary w-100 py-3" id="btn-start">
+			<b>DRAW</b>
+		</button>
+		
 		<hr>
 
 		<div class="row">
@@ -179,8 +146,19 @@
 		<div class="text-center">
 			<p id="progress-text" class="text-right">Progress: <span class="text-info">0%</span></p>
 			<div id="progress-bg" class="w-100"><div id="progress-bar"></div></div>
-			<div id="plot" class="w-100" style="min-height: 99vh;"><p id="unplotted-text" class="text-muted">&gt;&gt;&gt; Sequence is going to appear here. &lt;&lt;&lt;</p></div>
 		</div>
+		
+	</div>
+	
+	<div class="row container-fluid text-center">
+		<div id="plot" class="w-100">
+			<p id="unplotted-text" class="text-muted my-5">
+				&gt;&gt;&gt; Sequence is going to appear here. &lt;&lt;&lt;
+			</p>
+		</div>
+	</div>
+	
+	<div class="container">
 	
 		<hr>
 		
@@ -189,14 +167,12 @@
 				<h3 id="explanation">Explanation:</h3>
 				<p>The default sequence is of the <b>Ebola Virus</b>. Just press the <a href="#btn-start">draw-button</a> check it out!</p>
 				<p>Play around with the settings and create something brand new.</p>
+				<p>If you want to use something created with this, I'd <b>absolutely LOVE(!)</b> to hear about it. Please send me a tweet on <a href="https://www.twitter.com/DanielBiegler" target="_blank">Twitter</a> or reach me privately via Mail: <b>biegler.dan @gmail.com</b></p>
 				<p>You can find the source code <a href="https://github.com/DanielBiegler/visualize-dna-sequences">here</a>.</p>
-				<p>If you want to use something created with this, I'd <b>absolutely LOVE(!)</b> to hear about it. Please send me a message either on <a href="https://www.reddit.com/user/danielbiegler/">Reddit</a> or via Mail: <b>biegler.dan (at) gmail (dot) com</b></p>
 		
 				<h3 class="mt-4">Tips:</h3>
 				<ul>
-					<li>If you're on mobile <b>press the <a href="#btn-start">draw-button</a> and then zoom out</b> to see the whole image.</li>
 					<li>The sequence input is <b>case insensitive</b>.</li>
-					<li>You can <b>right-click the image</b> to "Save image as...". The white background is <b>transparent</b> when you save!</li>
 					<li>You can click on the color-boxes in the settings section to change them! After that, redraw the image with the <a href="#btn-start">draw-button</a>.</li>
 					<li>You can find a couple of DNA sequences <a href="https://github.com/DanielBiegler/visualize-dna-sequences/tree/master/sequences/viruses">here</a>.</li>
 				</ul>
@@ -205,17 +181,17 @@
 		</div>
 	</div>
 
-	<footer class="container mt-5 text-right text-sm-center">
+	<footer class="container my-5 text-right text-sm-center">
 		<hr>
 		<div class="row">
 			<div class="col-12 col-sm-2 my-1">
-				<p class="text-muted">v1.1.0</p>
+				<p class="text-muted">v2.0.0</p>
 			</div>
 			<div class="col-12 col-sm-2 my-1">
-				<p class="text-muted"><a href="https://github.com/DanielBiegler/visualize-dna-sequences">Source</a></p>
+				<p><a href="https://github.com/DanielBiegler/visualize-dna-sequences">Source</a></p>
 			</div>
 			<div class="col-12 col-sm-2 my-1">
-				<p class="text-muted"><a href="https://github.com/DanielBiegler">Author</a></p>
+				<p><a href="https://www.danielbiegler.de/">Author</a></p>
 			</div>
 		</div>
 	</footer>
@@ -228,5 +204,8 @@
 	<script src="main.js"></script>
 	<!-- For convenient offline development: uncomment, comment out again before release. -->
 	<!-- <script src="js/bootstrap.min.js"></script> -->
+	<!-- The gl2d partial bundle contains trace modules scatter, scattergl, splom, pointcloud, heatmapgl, contourgl and parcoords. -->
+	<!-- <script src="js/plotly-gl2d-1.41.2.min.js"></script> --> 
+	<!-- <script src="js/plotly-1.41.2.min.js"></script> -->
 </body>
 </html>
