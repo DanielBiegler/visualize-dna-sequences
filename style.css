@@ -21,3 +21,7 @@ a {
 	height: 100%;
 	background-color: #007bff; /* primary */
 }
+
+.fullscreen {
+	height: 100vh;
+}
