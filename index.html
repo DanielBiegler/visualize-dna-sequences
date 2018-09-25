@@ -25,11 +25,11 @@
 		
 		<div class="row">
 			<div class="col">
-				<h5 class="text-left" title="asd">Base-Config:</h5>
+				<h5 class="text-left mb-3">Base-Config:</h5>
 			</div>
 		</div>
 		<div class="row text-center">
-			<div class="col-sm-4 col-lg-2 offset-lg-1 col-6 mt-2">
+			<div class="col-sm-4 col-lg-2 offset-lg-1 col-6">
 				<label for="a-dir"><b>A</b>=</label>
 				<select id="a-dir" class="form-control">
 					<option value="N" selected>UP</option>
@@ -111,21 +111,47 @@
 		
 		<div class="row mt-3">
 			<div class="col">
-				<h5 class="text-left">Data-Config:</h5>
+				<h5 class="text-left mb-3">Data-Config:</h5>
 			</div>
 		</div>
 
 		<div class="row text-right">
 			<div class="col-sm-4">
-				<label for="file" class="btn btn-info w-75">
-					<b>Open FASTA File</b> <input type="file" accept=".fa, .mpfa, .fna, .fsa, .fasta" id="file" hidden>
+				<label id="label-file" for="file" class="btn btn-info w-75">
+					<b>Open FASTA File</b> <input type="file" accept=".fa, .mpfa, .fna, .fsa, .fasta, .txt" id="file" hidden>
 				</label>
 				<label for="offset" class="w-75">
-					<b class="d-inline-block mr-3" title="For large sequences it could be necessary to only draw X point for performance reasons.">
+					<b class="d-inline-block mr-3" data-toggle="tooltip" title="For large sequences it could be necessary to only draw X point for performance reasons.">
 						Resolution<sup><u>?</u></sup>
 					</b> 
 					<input type="number" min="1" max="4194300" id="offset" class="form-control d-inline-block w-50" placeholder="Draw every X point" value="5">
 				</label>
+			</div>
+			
+			<div class="col-sm-2">
+				<label for="size">
+					<b class="d-inline-block" data-toggle="tooltip" title="Size of the dots in pixels. Could be useful to increase the size for smaller sequences and decrease for larger ones.">
+						Size<sup><u>?</u></sup>
+					</b> 
+					<input type="number" min="1" id="size" class="form-control d-inline-block" value="4">
+				</label>
+			</div>
+
+			<div class="col-sm-2">
+				<div class="text-left material-switch">
+					<b class="mr-3" data-toggle="tooltip" title="Disabling color will reduce the memory footprint.">Color<sup><u>?</u></sup></b>
+					<input id="color" type="checkbox" checked/>
+					<label for="color" class=""></label>
+				</div>
+			</div>
+
+			<div class="col-sm-2">
+				<label for="chunksize">
+					<b class="d-inline-block" data-toggle="tooltip" title="Larger files will get split into multiple parts, this sets the size of those parts IN MEGABYTES(!). When reading huge files, increasing the chunksize will result in better performance. If you go too high though, the browser tab might crash!">
+						Chunksize<sup><u>?</u></sup>
+					</b> 
+					<input type="number" min="1" id="chunksize" class="form-control d-inline-block" value="4">
+				</label>		
 			</div>
 		</div>
 
@@ -165,7 +191,7 @@
 		<div class="row my-5">
 			<div class="col">
 				<h3 id="explanation">Explanation:</h3>
-				<p>The default sequence is of the <b>Ebola Virus</b>. Just press the <a href="#btn-start">draw-button</a> check it out!</p>
+				<p>You can find a demo <a href="/demo.html">here</a>.</p>
 				<p>Play around with the settings and create something brand new.</p>
 				<p>If you want to use something created with this, I'd <b>absolutely LOVE(!)</b> to hear about it. Please send me a tweet on <a href="https://www.twitter.com/DanielBiegler" target="_blank">Twitter</a> or reach me privately via Mail: <b>biegler.dan @gmail.com</b></p>
 				<p>You can find the source code <a href="https://github.com/DanielBiegler/visualize-dna-sequences">here</a>.</p>

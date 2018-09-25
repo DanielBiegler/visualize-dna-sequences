@@ -15,7 +15,9 @@ let a_dir, a_col = [0, 0, 0, 255],
 	
 	in_file,
 	
-	point_size = 3;
+	point_size = 3,
+	
+	chunk_size = 4;
 
 
 /**
@@ -54,6 +56,12 @@ function applySettings() {
 	[x_col[0], x_col[1], x_col[2], ] = hexToRGB(document.getElementById('x-col').value);
 
 	point_offset = parseInt(document.getElementById('offset').value);
+
+	point_size = parseInt(document.getElementById('size').value);
+
+	is_color_enabled = document.getElementById('color').checked;
+
+	chunk_size = parseInt(document.getElementById('chunksize').value);
 }
 
 
@@ -157,9 +165,9 @@ async function plotFASTAfile(file) {
 	const progress = $('#progress-text>span');
 	progress.removeClass('text-success text-danger').addClass('text-info');
 
-	let chunk_size = 1024*1024*4; // 4MB
+	let chunk_size_mb = 1000000*chunk_size;
 	let chunk_index = 1;
-	let total_chunks = Math.ceil((file.size/chunk_size), chunk_size);
+	let total_chunks = Math.ceil((file.size/chunk_size_mb), chunk_size_mb);
 	console.log("There will be", total_chunks, "chunk/s.")
 
 	const colors = [[]];
@@ -170,8 +178,8 @@ async function plotFASTAfile(file) {
 	let last_point = 0;
 	let datarevision = 0;
 	while (chunk_index <= total_chunks) {
-		offset = (chunk_index - 1) * chunk_size;
-		let blob = file.slice(offset, (offset + chunk_size));
+		offset = (chunk_index - 1) * chunk_size_mb;
+		let blob = file.slice(offset, (offset + chunk_size_mb));
 		const data = await new Promise((resolve, reject) => {
 			file_reader.onloadend = (event) => {
 				const target = (event.target);
@@ -226,7 +234,7 @@ async function plotFASTAfile(file) {
 				mode: "markers",
 				marker: {
 					size: point_size,
-					color: 'rgb(170, 0, 0)',
+					color: 'rgb(0, 0, 0)',
 					// line: {
 					// 	width: 1,
 					// 	color: 'rgb(0,0,0)'}
@@ -259,7 +267,7 @@ async function plotFASTAfile(file) {
 	console.log('----------------------------\nDone plotting. Report:');
 	console.log('- The plot holds: (', plot.data[0].x.length, ',', plot.data[0].y.length, ') points.');
 	console.log('- Offset:', point_offset,
-	',\n- Chunk size:', chunk_size,
+	',\n- Chunk size:', chunk_size_mb,
 	',\n- Chunks:', chunk_index - 1,
 	',\n- Total calculated points:', last_point);
 }
@@ -267,5 +275,17 @@ async function plotFASTAfile(file) {
 
 $('#file').change(() => {
 	in_file = document.getElementById('file').files[0];
+	if(in_file === undefined) {
+		$('#label-file>b').text('Open FASTA File');
+		$('#label-file').tooltip('dispose');
+	} else {
+		$('#label-file>b').text(in_file.name.substr(0, 10) + '...');
+		$('#label-file').attr('data-original-title', in_file.name).tooltip('show');
+		
+	}
 });
 
+
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+})
