@@ -171,6 +171,7 @@ async function plotFASTAfile(file) {
 	console.log("There will be", total_chunks, "chunk/s.")
 
 	const colors = [[]];
+	let last_color = x_col;
 	const scatter_x = [], scatter_y = [];
 	const cursor = { x: 0, y: 0 };
 	const file_reader = new FileReader();
@@ -199,28 +200,30 @@ async function plotFASTAfile(file) {
 			switch ( fasta_data[i] ) {
 				case 'A':
 					moveCursor(a_dir, cursor);
-					if(is_color_enabled) {colors[0].push(a_col);}
+					if(is_color_enabled) {last_color = a_col;}
 				break;
 				case 'T':
 					moveCursor(t_dir, cursor);
-					if(is_color_enabled) {colors[0].push(t_col);}
+					if(is_color_enabled) {last_color = t_col;}
 				break;
 				case 'G':
 					moveCursor(g_dir, cursor);
-					if(is_color_enabled) {colors[0].push(g_col);}
+					if(is_color_enabled) {last_color = g_col;}
 				break;
 				case 'C':
 					moveCursor(c_dir, cursor);
-					if(is_color_enabled) {colors[0].push(c_col);}
+					if(is_color_enabled) {last_color = c_col;}
 				break;
 				default:
 					moveCursor(x_dir, cursor);
-					if(is_color_enabled) {colors[0].push(x_col);}
+					if(is_color_enabled) {last_color = x_col;}
 				break;
 			}
 
 			if(last_point % point_offset === 0) {
-				// console.log('Added point', cursor);
+				if(is_color_enabled) {
+					colors[0].push(last_color);
+				}
 				scatter_x.push(cursor.x);
 				scatter_y.push(cursor.y);
 			}
@@ -266,6 +269,7 @@ async function plotFASTAfile(file) {
 	const plot = document.getElementById('plot');
 	console.log('----------------------------\nDone plotting. Report:');
 	console.log('- The plot holds: (', plot.data[0].x.length, ',', plot.data[0].y.length, ') points.');
+	console.log('- The color holds: (', colors[0].length, ') points.');
 	console.log('- Offset:', point_offset,
 	',\n- Chunk size:', chunk_size_mb,
 	',\n- Chunks:', chunk_index - 1,
