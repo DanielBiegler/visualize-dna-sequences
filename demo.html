@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Visualize DNA Sequences</title>
+
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!-- For convenient offline development: uncomment, comment out again before release. -->
+	<!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+</head>
+<body>
+	<!-- Settings -->
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col">
+				<h1>Visualizing DNA sequences via Javascript: Demo</h1>
+				<p class="text-muted">Want to try it out yourself? <a href="/">Click&nbsp;here.</a></p>
+			</div>
+        </div>
+        
+        <hr>
+
+        <div class="row">
+            <div class="col">
+                <p>This example features the Smallpox virus.<br>If you want to have more control over how the sequence looks, check out the proper visualizer <a href="/">here</a>.</p>
+            </div>
+        </div>
+
+		<hr>
+
+		<button class="btn btn-primary w-100 py-3" id="btn-start">
+			<b>START DEMO</b>
+		</button>
+		
+		<hr>
+
+		<div class="text-center">
+			<p id="progress-text" class="text-right">Progress: <span class="text-info">0%</span></p>
+			<div id="progress-bg" class="w-100"><div id="progress-bar"></div></div>
+		</div>
+		
+	</div>
+	
+	<div class="row container-fluid text-center">
+		<div id="plot" class="w-100">
+			<p id="unplotted-text" class="text-muted my-5">
+				&gt;&gt;&gt; Sequence is going to appear here. &lt;&lt;&lt;
+			</p>
+		</div>
+	</div>
+
+	<footer class="container my-5 text-right text-sm-center">
+		<hr>
+		<div class="row">
+			<div class="col-12 col-sm-2 my-1">
+                <p><a href="/">Visualizer</a></p>
+            </div>
+			<div class="col-12 col-sm-2 my-1">
+				<p><a href="https://github.com/DanielBiegler/visualize-dna-sequences">Source</a></p>
+			</div>
+			<div class="col-12 col-sm-2 my-1">
+				<p><a href="https://www.danielbiegler.de/">Author</a></p>
+            </div>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="demo.js"></script>
+	<!-- For convenient offline development: uncomment, comment out again before release. -->
+	<!-- <script src="js/bootstrap.min.js"></script> -->
+	<!-- The gl2d partial bundle contains trace modules scatter, scattergl, splom, pointcloud, heatmapgl, contourgl and parcoords. -->
+	<!-- <script src="js/plotly-gl2d-1.41.2.min.js"></script> --> 
+	<!-- <script src="js/plotly-1.41.2.min.js"></script> -->
+</body>
+</html>
