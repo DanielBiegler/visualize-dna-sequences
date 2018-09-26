@@ -81,32 +81,32 @@ function applySettings() {
 function moveCursor(direction, cursor) {
 	switch (direction) {
 		case 'N':
-			cursor.y -= 1;
+			cursor.y += 1;
 			break;
 		case 'E':
 			cursor.x += 1;
 			break;
 		case 'S':
-			cursor.y += 1;
+			cursor.y -= 1;
 			break;
 		case 'W':
 			cursor.x -= 1;
 			break;
 		case 'NE':
 			cursor.x += 1;
-			cursor.y -= 1;
+			cursor.y += 1;
 			break;
 		case 'NW':
 			cursor.x -= 1;
-			cursor.y -= 1;
+			cursor.y += 1;
 			break;
 		case 'SE':
 			cursor.x += 1;
-			cursor.y += 1;
+			cursor.y -= 1;
 			break;
 		case 'SW':
 			cursor.x -= 1;
-			cursor.y += 1;
+			cursor.y -= 1;
 			break;
 		default:
 			break;
@@ -249,7 +249,7 @@ async function plotFASTAfile(file) {
 			datarevision: datarevision
 		}
 		
-		
+
 		Plotly.react('plot', plotly_data, plotly_layout);
 		let percentage = ((offset/file.size)*100).toFixed(1) + '%';
 		progress.html(percentage);
