@@ -4,11 +4,7 @@ let a_dir, a_col = [0, 0, 0, 255],
 	g_dir, g_col = [0, 0, 0, 255],
 	c_dir, c_col = [0, 0, 0, 255],
 	x_dir, x_col = [0, 0, 0, 255],
-	
-	x_start, y_start,
-
-	canvas_w, canvas_h,
-	
+		
 	point_offset,
 	
 	is_color_enabled = true,
