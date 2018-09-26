@@ -249,7 +249,7 @@ async function plotFASTAfile(file) {
 			datarevision: datarevision
 		}
 		
-
+		
 		Plotly.react('plot', plotly_data, plotly_layout);
 		let percentage = ((offset/file.size)*100).toFixed(1) + '%';
 		progress.html(percentage);
@@ -257,11 +257,11 @@ async function plotFASTAfile(file) {
 		chunk_index++;
 	}
 	
-	progress.removeClass('text-info').addClass('text-success').html('100%');
-
 	if(is_color_enabled) {
 		Plotly.restyle('plot', 'marker.color', colors);
 	}
+	
+	progress.removeClass('text-info').addClass('text-success').html('100%');
 
 	const plot = document.getElementById('plot');
 	console.log('----------------------------\nDone plotting. Report:');
