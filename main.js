@@ -1,37 +1,19 @@
 /* Setting Vars */
-var a_dir, a_col = [0, 0, 0, 255],
+let a_dir, a_col = [0, 0, 0, 255],
 	t_dir, t_col = [0, 0, 0, 255],
 	g_dir, g_col = [0, 0, 0, 255],
 	c_dir, c_col = [0, 0, 0, 255],
 	x_dir, x_col = [0, 0, 0, 255],
-	
-	x_start, y_start,
-
-	canvas_w, canvas_h,
-	
-	dna_seq;
-
-
-/**
- * Prints all the settings.
- * 
- * For debugging purposes.
- */
-function printSettings() {
-	console.log(
-		'a_dir:', a_dir, ', a_col:', a_col, '\n',
-		't_dir:', t_dir, ', t_col:', t_col, '\n',
-		'g_dir:', g_dir, ', g_col:', g_col, '\n',
-		'c_dir:', c_dir, ', c_col:', c_col, '\n', 
-		'x_dir:', x_dir, 'x_col:', x_col, '\n', '\n',
-
-		'x_start:', x_start, ', y_start:', y_start, '\n', 
 		
-		'canvas_w:', canvas_w, ', canvas_h:', canvas_h, '\n', '\n',
-
-		'dna_seq:', dna_seq
-	);
-}
+	point_offset,
+	
+	is_color_enabled = true,
+	
+	in_file,
+	
+	point_size = 3,
+	
+	chunk_size = 4;
 
 
 /**
@@ -69,105 +51,13 @@ function applySettings() {
 	x_dir = document.getElementById('x-dir').value;
 	[x_col[0], x_col[1], x_col[2], ] = hexToRGB(document.getElementById('x-col').value);
 
-	dna_seq = document.getElementById('dna-seq').value.toUpperCase();
-}
+	point_offset = parseInt(document.getElementById('offset').value);
 
-/**
- * Uses the `dna_seq` to determine a canvas size that fits the sequence.
- * 
- * It has to run through the `dna_seq` once.
- * 
- * After the calculations are done, the canvas gets set to a fitting size.
- * 
- * @param {Number} offset For making the canvas a bit bigger for aesthetics
- */
-function cropCanvas(offset) {
-	// cursor here means the currently active position and its height/width
-	let cursor_height = cursor_width = 0;
-	let height_up = height_down = width_left = width_right = 0; 
+	point_size = parseInt(document.getElementById('size').value);
 
-	/**
-	 * Helper function for setting the cursor_[height/width] properly
-	 */
-	function setCursor(direction) {
-		switch (direction) {
-			case 'N':
-				cursor_height += 1;
-				break;
-			case 'NE':
-				cursor_height += 1;
-				cursor_width += 1;
-				break;
-			case 'NW':
-				cursor_height += 1;
-				cursor_width  -= 1;
-				break;
-			case 'E':
-				cursor_width += 1;
-				break;
-			case 'S':
-				cursor_height -= 1;
-				break;
-			case 'SE':
-				cursor_height -= 1;
-				cursor_width  += 1;
-				break;
-			case 'SW':
-				cursor_height -= 1;
-				cursor_width  -= 1;
-				break;
-			case 'W':
-				cursor_width -= 1;
-			default:
-				break;
-		}
-	}
+	is_color_enabled = document.getElementById('color').checked;
 
-	for(let i = 0; i < dna_seq.length; i++) {
-		switch (dna_seq.charAt(i)) {
-			case 'A':
-				setCursor(a_dir);
-				break;
-			case 'T':
-				setCursor(t_dir);
-				break;
-			case 'G':
-				setCursor(g_dir);
-				break;
-			case 'C':
-				setCursor(c_dir);
-				break;
-			default:
-				setCursor(x_dir);
-				break;
-		}
-
-		// check with 2 seperate ifs because diagonal direction is possible
-		if(cursor_height > height_up) {
-			height_up = cursor_height;
-		}
-		else if(cursor_height < height_down) {
-			height_down = cursor_height;
-		}
-		
-		if(cursor_width > width_right) {
-			width_right = cursor_width;
-		}
-		else if(cursor_width < width_left) {
-			width_left = cursor_width;
-		}
-
-	}
-	
-	// height_down and width_left are either zero or negative now
-	let min_height = height_up + Math.abs(height_down);
-	let min_width = width_right + Math.abs(width_left);
-
-	// now crop canvas and set global variables
-	document.getElementById('canvas-main').width  = canvas_w = min_width + offset * 2;
-	document.getElementById('canvas-main').height = canvas_h = min_height + offset * 2;
-	x_start = Math.abs(width_left) + offset;
-	y_start = min_height + height_down + offset;
+	chunk_size = parseInt(document.getElementById('chunksize').value);
 }
 
 
@@ -187,32 +77,32 @@ function cropCanvas(offset) {
 function moveCursor(direction, cursor) {
 	switch (direction) {
 		case 'N':
-			cursor.y -= 1;
+			cursor.y += 1;
 			break;
 		case 'E':
 			cursor.x += 1;
 			break;
 		case 'S':
-			cursor.y += 1;
+			cursor.y -= 1;
 			break;
 		case 'W':
 			cursor.x -= 1;
 			break;
 		case 'NE':
 			cursor.x += 1;
-			cursor.y -= 1;
+			cursor.y += 1;
 			break;
 		case 'NW':
 			cursor.x -= 1;
-			cursor.y -= 1;
+			cursor.y += 1;
 			break;
 		case 'SE':
 			cursor.x += 1;
-			cursor.y += 1;
+			cursor.y -= 1;
 			break;
 		case 'SW':
 			cursor.x -= 1;
-			cursor.y += 1;
+			cursor.y -= 1;
 			break;
 		default:
 			break;
@@ -220,72 +110,182 @@ function moveCursor(direction, cursor) {
 }
 
 
-/**
- * Draws the DNA sequence.
- * 
- * It uses the global variables, so make sure to call `applySettings()`
- * before you call this unless you know what you're doing.
- */
-function draw() {
-	const ctx = document.getElementById('canvas-main').getContext('2d');
-	let img_data = ctx.createImageData(canvas_w, canvas_h);
-	let cursor = {x: x_start, y: y_start};
-
-	for (let index = 0, col = [255, 0, 0, 255]; index < dna_seq.length; index++) {
-		switch (dna_seq.charAt(index)) {
-			case 'A':
-				moveCursor(a_dir, cursor);
-				[col[0], col[1], col[2], ] = a_col;
-				break;
-			case 'T':
-				moveCursor(t_dir, cursor);
-				[col[0], col[1], col[2], ] = t_col;
-				break;
-			case 'G':
-				moveCursor(g_dir, cursor);
-				[col[0], col[1], col[2], ] = g_col;
-				break;
-			case 'C':
-				moveCursor(c_dir, cursor);
-				[col[0], col[1], col[2], ] = c_col;
-				break;
-			default:
-				moveCursor(x_dir, cursor);
-				[col[0], col[1], col[2], ] = x_col;
-				break;
-		}
-
-		const color_indices = getColorIndicesForCoord(cursor.x, cursor.y, canvas_w);
-		const [r_index, g_index, b_index, a_index] = color_indices;
-
-		[img_data.data[r_index], img_data.data[g_index], img_data.data[b_index], img_data.data[a_index]] = col;
-
-	}
-	
-	ctx.putImageData(img_data, 0, 0);
-}
-
-
-function getColorIndicesForCoord(x, y, width) {
-	var c = y * (width * 4) + x * 4;
-	return [c, c + 1, c + 2, c + 3]; /* r, g, b, a */
-}
-
-
 function start() {
+	if(in_file === undefined) {
+		alert("Error: No file was specified. Select a file before drawing.");
+		return;
+	}
 	applySettings();
-	cropCanvas(20);
-	draw();
+	$('#plot').addClass('fullscreen');
+	document.getElementById('progress-text').scrollIntoView(true);
+	$('#unplotted-text').addClass('d-none');
+	plotFASTAfile(in_file);
 }
 
 
 document.getElementById('btn-start').addEventListener('click', start);
 
 
-$('#btn-responsive').click(function() {
+/**
+ * Returns an array holding the sequential data.
+ * Ignores lines that start with `>` (comments)
+ * 
+ * @param {string} data
+ */
+function parseFASTAformat(data) {
+	const fasta = [];
+	const lines = data.toUpperCase().split('\n');
 
-	$('#canvas-main').toggleClass('w-100');
+	for (let i = 0; i < lines.length; i++) {
+		// ignore comment lines
+		if(lines[i][0] !== '>') {
+			for(let j = 0; j < lines[i].length; j++) {
+				fasta.push(lines[i][j]);
+			}
+		}
+	}
 
-	$(this).html( $(this).html() == 'Original size' ? 'Fit your device' : 'Original size' );
+	return fasta;
+}
 
+
+/**
+ * 
+ * @param {File} file 
+ */
+async function plotFASTAfile(file) {
+	// Delete the old plot if it exists,
+	// because otherwise Plotly.react won't update the plot.
+	Plotly.purge('plot');
+	
+	const progress = $('#progress-text>span');
+	progress.removeClass('text-success text-danger').addClass('text-info');
+
+	let chunk_size_mb = 1000000*chunk_size;
+	let chunk_index = 1;
+	let total_chunks = Math.ceil((file.size/chunk_size_mb), chunk_size_mb);
+	console.log("There will be", total_chunks, "chunk/s.")
+
+	const colors = [[]];
+	let last_color = x_col;
+	const scatter_x = [], scatter_y = [];
+	const cursor = { x: 0, y: 0 };
+	const file_reader = new FileReader();
+	let offset = 0;
+	let last_point = 0;
+	let datarevision = 0;
+	while (chunk_index <= total_chunks) {
+		offset = (chunk_index - 1) * chunk_size_mb;
+		let blob = file.slice(offset, (offset + chunk_size_mb));
+		const data = await new Promise((resolve, reject) => {
+			file_reader.onloadend = (event) => {
+				const target = (event.target);
+				if (target.error === null) {
+					offset += target.result.length;
+					resolve(target.result);
+				}
+				else {
+					reject(target.error);
+				}
+			};
+			file_reader.readAsText(blob);
+		});
+		const fasta_data = parseFASTAformat(data);
+		
+		for (let i = 0; i < fasta_data.length; i++) {
+			switch ( fasta_data[i] ) {
+				case 'A':
+					moveCursor(a_dir, cursor);
+					if(is_color_enabled) {last_color = a_col;}
+				break;
+				case 'T':
+					moveCursor(t_dir, cursor);
+					if(is_color_enabled) {last_color = t_col;}
+				break;
+				case 'G':
+					moveCursor(g_dir, cursor);
+					if(is_color_enabled) {last_color = g_col;}
+				break;
+				case 'C':
+					moveCursor(c_dir, cursor);
+					if(is_color_enabled) {last_color = c_col;}
+				break;
+				default:
+					moveCursor(x_dir, cursor);
+					if(is_color_enabled) {last_color = x_col;}
+				break;
+			}
+
+			if(last_point % point_offset === 0) {
+				if(is_color_enabled) {
+					colors[0].push(last_color);
+				}
+				scatter_x.push(cursor.x);
+				scatter_y.push(cursor.y);
+			}
+
+			last_point++;
+		}
+		
+		const plotly_data = [
+			{
+				type: "scattergl",
+				mode: "markers",
+				marker: {
+					size: point_size,
+					color: 'rgb(0, 0, 0)',
+					// line: {
+					// 	width: 1,
+					// 	color: 'rgb(0,0,0)'}
+				},
+				x: scatter_x,
+				y: scatter_y
+			}
+		];
+
+		datarevision += 1;
+		const plotly_layout = {
+			datarevision: datarevision
+		}
+		
+
+		Plotly.react('plot', plotly_data, plotly_layout);
+		let percentage = ((offset/file.size)*100).toFixed(1) + '%';
+		progress.html(percentage);
+		document.getElementById('progress-bar').style.width = percentage;
+		chunk_index++;
+	}
+	
+	if(is_color_enabled) {
+		Plotly.restyle('plot', 'marker.color', colors);
+	}
+	
+	progress.removeClass('text-info').addClass('text-success').html('100%');
+
+	const plot = document.getElementById('plot');
+	console.log('----------------------------\nDone plotting. Report:');
+	console.log('- The plot holds: (', plot.data[0].x.length, ',', plot.data[0].y.length, ') points.');
+	console.log('- The color holds: (', colors[0].length, ') points.');
+	console.log('- Offset:', point_offset,
+	',\n- Chunk size:', chunk_size_mb,
+	',\n- Chunks:', chunk_index - 1,
+	',\n- Total calculated points:', last_point);
+}
+
+
+$('#file').change(() => {
+	in_file = document.getElementById('file').files[0];
+	if(in_file === undefined) {
+		$('#label-file>b').text('Open FASTA File');
+		$('#label-file').tooltip('dispose');
+	} else {
+		$('#label-file>b').text(in_file.name.substr(0, 10) + '...');
+		$('#label-file').attr('data-original-title', in_file.name).tooltip('show');
+		
+	}
 });
+
+
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+})
