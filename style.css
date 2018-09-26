@@ -36,7 +36,7 @@ a {
     height: 0px;
     position: relative; 
 	width: 40px;  
-	background-color: #dc3545;
+	background-color: orange;
 }
 
 .material-switch > label::before {
