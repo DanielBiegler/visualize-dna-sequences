@@ -13,7 +13,14 @@ let a_dir, a_col = [0, 0, 0, 255],
 	
 	point_size = 3,
 	
-	chunk_size = 4;
+	chunk_size = 4,
+	
+	previous_config = {
+		in_file: in_file,
+		point_size: point_size,
+		point_offset: point_offset,
+		chunk_size: chunk_size
+	};
 
 
 /**
@@ -51,12 +58,15 @@ function applySettings() {
 	x_dir = document.getElementById('x-dir').value;
 	[x_col[0], x_col[1], x_col[2], ] = hexToRGB(document.getElementById('x-col').value);
 
-	point_offset = parseInt(document.getElementById('offset').value);
+	previous_config.point_offset = point_offset;
+	point_offset = parseInt(document.getElementById('offset').value); // resolution
 
+	previous_config.point_size = point_size;
 	point_size = parseInt(document.getElementById('size').value);
 
 	is_color_enabled = document.getElementById('color').checked;
 
+	previous_config.chunk_size = chunk_size;
 	chunk_size = parseInt(document.getElementById('chunksize').value);
 }
 
@@ -116,10 +126,34 @@ function start() {
 		return;
 	}
 	applySettings();
-	$('#plot').addClass('fullscreen');
-	document.getElementById('progress-text').scrollIntoView(true);
-	$('#unplotted-text').addClass('d-none');
-	plotFASTAfile(in_file);
+
+	// check if it even needs complete re-plotting or just redrawing
+	if (previous_config.in_file === in_file
+		&& previous_config.chunk_size === chunk_size
+		&& previous_config.point_size === point_size
+		&& previous_config.point_offset === point_offset)
+	{
+		console.log("Did nothing since no parameter changed.");
+	}
+	else if(document.querySelector('#plot.js-plotly-plot') !== null // = got plotted before
+		&& previous_config.chunk_size === chunk_size
+		&& previous_config.in_file === in_file
+		&& previous_config.point_offset === point_offset
+		&& previous_config.point_size !== point_size)
+	{
+		Plotly.restyle('plot', { 'marker.size': point_size });
+		previous_config.point_size = point_size;
+		// only scroll on mobile since then it's hard to understand that the plot changed
+		if (/Mobi/.test(navigator.userAgent)) {
+			document.getElementById('progress-text').scrollIntoView(true);
+		}
+		console.log("Reused previous plot with new parameters.");
+	} else {
+		$('#plot').addClass('fullscreen');
+		document.getElementById('progress-text').scrollIntoView(true);
+		$('#unplotted-text').addClass('d-none');
+		plotFASTAfile(in_file);
+	}
 }
 
 
@@ -274,6 +308,11 @@ async function plotFASTAfile(file) {
 
 
 $('#file').change(() => {
+	if(previous_config.in_file !== undefined) {
+		previous_config.in_file = in_file;
+	} else {
+		previous_config.in_file = document.getElementById('file').files[0];
+	}
 	in_file = document.getElementById('file').files[0];
 	if(in_file === undefined) {
 		$('#label-file>b').text('Open FASTA File');
