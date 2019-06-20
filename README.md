@@ -14,4 +14,6 @@ I felt up to the task and wanted to give it a go.
 
 Here is what the visualizer generally can look like:
 
-![Smallpox Virus Strain Comparison](https://github.com/DanielBiegler/visualize-dna-sequences/blob/master/media/vaccinia_variola_comparison.gif)
+![Human DNA vs. Chimp DNA](https://github.com/DanielBiegler/visualize-dna-sequences/blob/master/media/daniel_biegler_human_vs_chimp_dna_comparison.gif)
+
+Like this project? Check my site out: https://www.danielbiegler.de
