@@ -16,7 +16,7 @@
 	<div class="container mt-5">
 		<div class="row">
 			<div class="col">
-				<h1>Visualizing DNA sequences via Javascript</h1>
+				<h1>Visualizing DNA Sequences</h1>
 				<p class="text-muted">Need help? Explanation at the bottom! <a href="#explanation">Click&nbsp;here&nbsp;to&nbsp;scroll.</a></p>
 				<p class="text-muted">Want to see an example? <a href="https://danielbiegler.github.io/visualize-dna-sequences/demo">Demo&nbsp;here.</a></p>
 			</div>
@@ -121,7 +121,7 @@
 		</div>
 
 		<div class="row text-center">	
-			<div class="col-sm-4 col-lg-4 col-6">
+			<div class="col-sm-4 col-lg-3 col-6">
 				<label for="label-file">
 					<b class="" data-toggle="tooltip" title="You can open a file, draw it, change parameters and redraw it again. After selecting a file you can hover the Button for the full filename.">
 						File<sup><u>?</u></sup>
@@ -159,12 +159,24 @@
 				</div>
 			</div>
 
-			<div class="col-sm-4 col-lg-2 col-6 mt-3 mt-lg-0 offset-6 offset-sm-0">
+			<div class="col-sm-4 col-lg-1 col-6 mt-3 mt-lg-0">
 				<label for="chunksize">
 					<b class="" data-toggle="tooltip" title="Larger files will get split into multiple parts, this sets the size of those parts IN MEGABYTES(!). When reading huge files, increasing the chunksize will result in better performance. If you go too high though, the browser tab might crash!">
 						Chunksize<sup><u>?</u></sup>
 					</b> 
-					<input type="number" min="1" id="chunksize" class="form-control mt-2" value="4">
+				<input type="number" min="1" id="chunksize" class="form-control mt-2" value="4">
+				</label>		
+			</div>
+
+			<div class="col-sm-4 col-lg-2 col-6 mt-3 mt-lg-0">
+				<label for="graph-mode">
+					<b data-toggle="tooltip" title="EXPERIMENTAL: Different ways of representing the data. Currently 'Lines' only support a default color.">
+						Mode<sup><u>?</u></sup>
+					</b> 
+					<select id="graph-mode" class="form-control mt-2">
+						<option selected value="markers">Points</option>
+						<option value="">Lines</option>
+					</select>
 				</label>		
 			</div>
 		</div>
@@ -187,10 +199,57 @@
 	<div class="row container-fluid text-center">
 		<div id="plot" class="w-100">
 			<p id="unplotted-text" class="text-muted my-5">
-				&gt;&gt;&gt; Sequence is going to appear here. &lt;&lt;&lt;
+				Sequence is going to appear here.<br>
+				Quick-Edit options will appear underneath the graph.
 			</p>
 		</div>
 	</div>
+
+	<div id="quickedit-container" class="container d-none">
+		<h5 class="mb-3">
+			<span data-toggle="tooltip" title="You can change some parameters of the Graph after plotting with no need to redraw the whole sequence.">
+				Quick-edit:<sup><u>?</u></sup>
+			</span>
+		</h5>
+		<div class="row text-center">
+			<div class="col-12 mb-3">
+				<label for="quickedit-size">
+					<b>Size</b> 
+				<input type="number" min="1" id="quickedit-size" class="form-control mt-2" value="-1">
+			</div>
+
+			<div class="col-6 col-md-3">
+				<label for="quickedit-x-range-min">
+					<b>X Range Minimum</b> 
+				<input type="number" id="quickedit-x-range-min" class="form-control mt-2" value="-1">		
+			</div>
+
+			<div class="col-6 col-md-3">
+				<label for="quickedit-x-range-max">
+					<b>X Range Maximum</b> 
+				<input type="number" id="quickedit-x-range-max" class="form-control mt-2" value="-1">		
+			</div>
+
+			<div class="col-6 col-md-3">
+				<label for="quickedit-y-range-min">
+					<b>Y Range Minimum</b> 
+				<input type="number" id="quickedit-y-range-min" class="form-control mt-2" value="-1">		
+			</div>
+
+			<div class="col-6 col-md-3">
+				<label for="quickedit-y-range-max">
+					<b>Y Range Maximum</b> 
+				<input type="number" id="quickedit-y-range-max" class="form-control mt-2" value="-1">		
+			</div>
+
+			<div class="col-12">
+				<button id="btn-quickedit" class="btn btn-secondary w-100 py-3 mt-3">
+					<b>EDIT</b>
+				</button>
+			</div>
+		</div>
+	</div>
+
 	
 	<div class="container">
 	
@@ -203,12 +262,12 @@
 				<p>
 					This site uses the 4 DNA bases:	<b>A</b>denin, <b>C</b>ytosin, <b>G</b>uanin and <b>T</b>hymin<br>
 					to visualize DNA sequences. While this can be used to show correlations between strains,<br>
-					(example: <a href="https://danielbiegler.github.io/visualize-dna-sequences/media/vaccinia_variola_comparison.gif">Vaccinia virus and Variola virus</a> ) the general use was intended for artistic purposes only. 
+					(example: <a href="https://github.com/DanielBiegler/visualize-dna-sequences/blob/master/media/daniel_biegler_human_vs_chimp_dna_comparison.gif">Human vs. Chimpanzee</a> ) the general use was intended for artistic purposes only. 
 				</p>
 				<p>Play around with the settings and create something brand new.</p>
 				<p>
 					If you want to use something created with this, I'd <b>absolutely LOVE(!)</b> to hear about it.<br>
-					Please send me a tweet on <a href="https://www.twitter.com/DanielBiegler" target="_blank">Twitter</a> or reach me privately via Mail: <b>biegler.dan&nbsp;@&nbsp;gmail.com</b>
+					Please send me a tweet on <a href="https://www.twitter.com/DanielBiegler" target="_blank">Twitter</a> or reach me privately via my <a href="https://www.danielbiegler.de">website</a>.</b>
 				</p>
 				<p>You can find the source code <a href="https://github.com/DanielBiegler/visualize-dna-sequences">here</a>.</p>
 		
@@ -241,7 +300,7 @@
 		<hr>
 		<div class="row">
 			<div class="col-12 col-sm-2 my-1">
-				<p class="text-muted">v2.1.2</p>
+				<p class="text-muted">v2.2.0</p>
 			</div>
 			<div class="col-12 col-sm-2 my-1">
 				<p><a href="https://github.com/DanielBiegler/visualize-dna-sequences">Source</a></p>
